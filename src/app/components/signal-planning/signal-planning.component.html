@@ -1,0 +1,132 @@
+
+    <div class="SelectProducts">
+        <div class="type-container col-6">
+            <label class="LabelSigPlaning">Select Domain</label>
+            <ng-select [items]='productTypes' bindLabel='name' bindValue='name' [clearable]='false' [(ngModel)]='selDType'
+              (change)='showdata()'>
+            </ng-select>
+          </div>
+          <div class="type-container col-6">
+            <label class="LabelSigPlaning" >Select</label>
+            <ng-select [items]="productFamily" bindLabel="name" placeholder="Product Family" [(ngModel)]="selectProductFamily"
+            (change)="showdata()" [clearable]="false">
+          </ng-select>
+          </div>
+    </div>
+
+    <p-table class="SinPlaninTracting" #dt  [value]="planningData" [columns]="planningcols"
+    styleClass="ui-table-customers" [rowHover]="true" [rows]="10" [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[10,25,50]" [paginator]="true"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} records" [filterDelay]="0"
+    selectionMode="multiple" >
+    <ng-template pTemplate="header">
+
+      <tr>
+        <!-- <th width="30%" style="display: none;" pSortableColumn="id">Id<p-sortIcon field="id"></p-sortIcon>
+        </th> -->
+
+        <th width="42%" pSortableColumn="name">Name<p-sortIcon field="name"></p-sortIcon>
+        </th>
+        <th width="15%" pSortableColumn="prev_review_period">Last Review Period<p-sortIcon field="prev_review_period"></p-sortIcon>
+        </th>
+
+        <th width="18%" pSortableColumn="periodicity_in_quarters">Periodicity in Quarters<p-sortIcon field="periodicity_in_quarters">
+          </p-sortIcon>
+        </th>
+        <th width="15%" pSortableColumn="next_quarter">Next Review Period<p-sortIcon field="next_quarter"></p-sortIcon>
+        </th>
+
+        <th  *ngIf="isadmin" width="10%" pSortableColumn="action">Action<p-sortIcon field="action"></p-sortIcon>
+        </th>
+
+
+      </tr>
+      <tr>
+        <th style="display: none;">
+          <!-- <input style="border-radius: 10px;text-align: center;font-family: none;" pInputText type="text" (input)="dt.filter($event.target.id, 'id', 'contains')" placeholder="Search by User" class="ui-column-filter"> -->
+        </th>
+
+        <th>
+          <input id="SignalTrackingInput_1" pInputText type="text"
+            (input)="dt.filter($event.target.value, 'name', 'contains')" placeholder="Search by Product"
+            class="ui-column-filter">
+        </th>
+        <th>
+          <input id="SignalTrackingInput_2" pInputText type="text"
+            (input)="dt.filter($event.target.value, 'prev_review_period', 'contains')"
+            placeholder="Search by Last Review Period" class="ui-column-filter">
+        </th>
+        <th>
+          <input id="SignalTrackingInput_3" pInputText type="text"
+            (input)="dt.filter($event.target.value, 'periodicity_in_quarters', 'contains')"
+            placeholder="Search by Periodicity" class="ui-column-filter">
+        </th>
+        <th>
+          <input id="SignalTrackingInput_4" pInputText type="text"
+            (input)="dt.filter($event.target.value, 'next_quarter', 'contains')"
+            placeholder="Search by Next Review Period" class="ui-column-filter">
+        </th>
+        <th *ngIf="isadmin">
+          <!-- <input style="border-radius: 10px;text-align: center;font-family: none;"  pInputText type="text" (input)="dt.filter($event.target.value, 'signal_code', 'contains')" placeholder="Search by Signal Code" class="ui-column-filter"> -->
+        </th>
+
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-customer>
+      <tr class="ui-selectable-row">
+
+        <td style="display: none;">
+          {{customer.id}}
+        </td>
+        <td>
+          <span style="vertical-align: middle;">{{customer.name}}</span>
+        </td>
+        <td>
+          {{ customer.prev_review_period }}
+        </td>
+        <td *ngIf="!customer.is_clicked">
+          <span
+            style="vertical-align: middle;">{{ customer.periodicity_in_quarters ? customer.periodicity_in_quarters : '0/Non Galderma Product'}}</span>
+        </td>
+        <td  *ngIf="customer.is_clicked">
+          <ng-select [items]='periodicity' bindLabel='name' bindValue='id' [clearable]='false' placeholder='select'
+            [(ngModel)]='customer.periodicity_in_quarters'>
+
+          </ng-select>
+        </td>
+        <td>
+          <span style="vertical-align: middle;">{{customer.next_quarter}}</span>
+
+        </td>
+        <td class="SigPlanPencil" *ngIf="isadmin">
+          <fa-icon title="Edit" *ngIf="!customer.is_clicked" [icon]="faPencilAlt" class="fa-icons"
+            (click)="customer.is_clicked = !customer.is_clicked">
+          </fa-icon>
+          <fa-icon title="Save" *ngIf="customer.is_clicked" [icon]="faSave" class="fa-icons" size='lg'
+            (click)="updatePlanningProd(customer)">
+          </fa-icon>
+          <fa-icon title="Cancel" *ngIf="customer.is_clicked" [icon]="faTimes" rotate="90" class="fa-icons ml-3" size='lg'
+            (click)="showdata()">
+          </fa-icon>
+        </td>
+
+
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="3" style="text-align:left">No Record found.</td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      <div class="ui-helper-clearfix" style="text-align: left">
+        <button type="button" pButton icon="pi pi-file-o" iconPos="left" label="Download Report in CSV" (click)="exportCSV(dt)"
+          style="margin-right: 0.5em;"></button>
+          <button type="button" pButton icon="pi pi-file-excel" iconPos="left" label="Download Report in EXCEL" (click)="exportExcel()" style="margin-right: 0.5em;" class="ui-button-success"></button>
+
+      </div>
+    </ng-template>
+  </p-table>
+
+
+

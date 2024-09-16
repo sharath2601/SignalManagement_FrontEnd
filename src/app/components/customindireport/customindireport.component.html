@@ -1,0 +1,148 @@
+<div id="narrative-window" class="modal-body container-fluid" style="height:800px !important; padding-top: 3px;border: 11px solid #6ba2e3;">
+  <div class="CustRow" tabindex="0">
+    <button type="button" class="closeBtn float-right" (click)="closeModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+      </div>
+  <div id="page1">
+    <div class="row d-flex">
+      <div class="col caseId-container" style="background-color: #9ebbdf;">
+        <label class="h4 " style="text-align: center;padding-left: 30%;font-weight: bold;text-decoration: underline;">Case Details</label>
+
+        <div class="d-flex">
+          <label class="font-weight-bold">CaseID:</label>
+          <p class="ml-1">{{ basicDetails.aer_no + '_' + basicDetails.version_no}}</p>
+        </div>
+        <div class="d-flex">
+          <label class="font-weight-bold">Initial Receipt Date: </label>
+          <p class="ml-1">{{ basicDetails.init_recv_date }}</p>
+        </div>
+        <div class="d-flex">
+          <label class="font-weight-bold">Latest Receipt Date: </label>
+          <p class="ml-1">{{ basicDetails.latest_recv_date }}</p>
+        </div>
+        <div class="d-flex">
+          <label class="font-weight-bold">Country: </label>
+          <p class="ml-1">{{ basicDetails.occurence_country }}</p>
+        </div>
+
+      </div>
+      <div class="col" style="background-color: #97b3d7;">
+        <label class="h4" style="text-align: center;padding-left: 30%;font-weight: bold;text-decoration: underline;">Patient Demographics</label>
+        <div class="d-flex">
+          <label class="font-weight-bold">Patient Age:</label>
+          <p class="ml-1">{{ basicDetails.age_at_onset + ' ' +  basicDetails.age_unit }}</p>
+        </div>
+        <div class="d-flex">
+          <label class="font-weight-bold">Patient Gender: </label>
+          <p class="ml-1">{{ basicDetails.sex_gender ? basicDetails.sex_gender : basicDetails.gender }}</p>
+        </div>
+        <!-- <div class="d-flex">
+          <label class="font-weight-bold">Patient Ethnicity: </label>
+          <p class="ml-1">{{ narrativeReport.case_id }}</p>
+        </div> -->
+      </div>
+
+      <div class="product-details-cont col" style="background-color: #8ca6c8;">
+        <label class="h4" style="text-align: center;padding-left: 30%;font-weight: bold;text-decoration: underline;">Product Details</label>
+          <div class="">
+            <div class="d-flex">
+              <label class="font-weight-bold">Suspect Drug:</label>
+              <p class="ml-1">{{ suspectDrug }}</p>
+            </div>
+            <div class="d-flex">
+              <label class="font-weight-bold">Medical History:</label>
+
+              <p class="ml-1">{{ mh }}</p>
+            </div>
+
+             <!-- <div class="d-flex">
+              <label class="font-weight-bold">Indication:</label>
+              <p class="ml-1"></p>
+            </div> -->
+            <div class="d-flex">
+              <label class="font-weight-bold">Concomitant Medication:</label>
+              <p class="ml-1">{{ concmt ? concmt.replace('£',',') : 'Not Available' }}</p>
+            </div>
+          </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <div ic="page2">
+
+    <label class="h4" style="font-weight: bold; text-decoration: underline;">Event Details:</label>
+    <div class="narrative-ae-details">
+
+      <table class="table table-bordered mt-2">
+        <thead class="table-header-hover" style="background-color: #2b5b96;color :white;">
+          <tr>
+
+            <td style="font-size: 18px !important;font-weight: bold;">Event Term</td>
+            <td style="font-size: 18px !important;font-weight: bold;">Event Onset Date</td>
+            <td style="font-size: 18px !important;font-weight: bold; width: 10%;">Event Stop Date / Duration</td>
+            <td style="font-size: 18px !important;font-weight: bold;">Event Seriousness</td>
+            <td style="font-size: 18px !important;font-weight: bold;">Event Outcome</td>
+            <td style="font-size: 18px !important;font-weight: bold;">Internationally Labelled</td>
+
+            <td style="font-size: 18px !important;font-weight: bold;">Dechallenge</td>
+            <td style="font-size: 18px !important;font-weight: bold;">Rechallenge</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of ae_details | paginate: { itemsPerPage: 6, currentPage: currentPage}; let i = index">
+            <td>{{ item.pt ? item.pt : item.pt_name }}</td>
+            <td>{{ item.onset_date.length > 0 ? item.onset_date : 'Not Reported' }}</td>
+            <td>{{ item.cessation_date ? item.cessation_date : item.duration }}</td>
+            <td>{{ item.company_event_seriousness }}</td>
+            <td>{{ item.outcome ? item.outcome : 'Not Available' }}</td>
+            <td>{{ item.listedness }}</td>
+
+            <td>{{ item.de_challenge ? item.de_challenge : item.dechallenge }}</td>
+            <td>{{ item.re_challenge ? item.re_challenge : item.rechallenge }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <pagination-controls (pageChange)="currentPage = $event"></pagination-controls>
+    </div>
+
+    <div class="narrative-container">
+
+      <label class="font-weight-bold narrative-text" style="text-decoration: underline;">Case Narrative:</label>
+      <p>{{ basicDetails.c_narrative  }}</p>
+    </div>
+
+    <div class="mb-3 pv-comment-container">
+
+      <label class="font-weight-bold comment-text" style="text-decoration: underline;">PV Comment:</label>
+      <textarea id="icsr-comment" class="form-control" [disabled]="true"
+        [(ngModel)]="pv_comment" ></textarea>
+    </div>
+
+    <div class="mb-3 company-comment-container">
+
+      <label class="font-weight-bold comment-text" style="text-decoration: underline;">Company Comment:</label>
+      <textarea id="icsr-comment" class="form-control" [disabled]="true"
+        [(ngModel)]="company_comment"></textarea>
+    </div>
+
+    <div class="mb-3 review-comment-container">
+      <label class="font-weight-bold comment-text" style="text-decoration: underline;">Signal Reviewer's Comment:</label>
+      <textarea id="icsr-comment" class="form-control" [disabled]="false" maxlength="200"
+        [(ngModel)]="IndividualIcsrComment" (input)="checkCommentLength(IndividualIcsrComment)"></textarea>
+      <span *ngIf="basicDetails.comment.user !== undefined"><b>Last Updated By </b>{{ basicDetails.comment.user + ' - ' + basicDetails.comment.time_stamp }}</span>
+    </div>
+  </div>
+
+<div class="d-flex mt-2">
+  <!--Button to close individual icsr report modal-->
+  <!--Button to update comment in individual icsr report-->
+  <button class="btn btn-primary col-sm-2 ml-3" (click)="updateIcsrComment(basicDetails.aer_no, IndividualIcsrComment)"
+    >Update Comment</button>
+  <button class="btn btn-primary col-sm-2 mx-2" (click)="closeModal()">Close</button>
+  <button class="btn btn-primary col-sm-2 mx-2" (click)="Download_icsr()">Download Case</button>
+</div>
+</div>

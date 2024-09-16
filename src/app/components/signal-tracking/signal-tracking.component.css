@@ -1,0 +1,8 @@
+:host >>> body .ui-table .ui-table-thead > tr > th{
+    font-size: 18px !important;
+    padding: 0px;;
+}
+
+:host >>> .ng-star-inserted{
+    font-size: 17px;
+}

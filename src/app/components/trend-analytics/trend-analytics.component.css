@@ -1,0 +1,231 @@
+#timelinedashbaord{
+  padding: 0.90rem;
+}
+
+.table-titles {
+    color: #265690;
+    font-size: 0.90rem;
+  }
+
+  :host >>> ngx-charts-number-card .cell .trimmed-label {
+
+    font-size: large;
+    pointer-events: none;
+    overflow: hidden;
+    text-align: left;
+    line-height: 1em;
+    font-weight: 1000px;
+
+  }
+
+  :host >>> pie-label {
+    font-size: 20px;
+  }
+  .ng-star-inserted{
+    font-size: 20px;
+  }
+
+  .ng-star-inserted > .tick > text{
+    font-size: 20px;
+  }
+
+  .ng-dropdown-panel.ng-select-bottom{
+    border: 2px solid black !important;
+  }
+  .ngx-charts > text { font-size: 20px;  }
+   g > .pie-label {
+    font-size: 20px !important;
+    }
+    /* g > text {
+      font-size: 20px !important;
+      }
+     */
+
+    .pie-label {
+    font-size: 20px !important;
+    }
+    .advanced-pie-legend .total-value {
+
+      font-size: 44px !important;
+
+  }
+  /* .advanced-pie-legend
+  {
+    font-weight: bold;
+
+    color: white;
+  } */
+  .signaldetection:hover{
+
+    box-shadow: 10px 10px 5px grey;
+    cursor: pointer;
+
+  }
+  .ng-select .ng-select-container{
+    background-color: #265690;
+
+    color: white;
+
+    font-weight: bold;
+
+    padding: 0px !important;
+
+    margin: 0px !important;
+    }
+
+  .ng-select.ng-select-single .ng-select-container{
+    background-color: #265690;
+
+  color: white;
+
+  font-weight: bold;
+
+  padding: 0px !important;
+
+  margin: 0px !important;
+  }
+  .search-text-input{
+    border-top:thin solid  #e5e5e5;
+    border-right:thin solid #e5e5e5;
+    border-bottom:0;
+    border-left:thin solid  #e5e5e5;
+    box-shadow:0px 1px 1px 1px #e5e5e5;
+    float:left;
+    height:17px;
+    outline:0;
+    padding:.4em 0 .4em .6em;
+    width:183px;
+  }
+
+  #button-holder{
+    background-color:white;
+    border-top:thin solid #e5e5e5;
+    box-shadow:1px 1px 1px 1px #e5e5e5;
+    cursor:pointer;
+    float:left;
+    height:36px;
+    text-align:center;
+    width:50px;
+  }
+  .CardHeadTimeLine{
+    text-align: center; margin: 10px;font-size: larger; font-weight: bold;
+  }
+
+  .TimeLineCard {
+    border-radius: 5px !important;
+    /* box-shadow: 5px 5px 30px 7px rgba(0,0,0,0.25), -5px -5px 30px 7px rgba(0,0,0,0.22) !important; */
+    height: 100%;
+    width: 100%;
+    background-color: #FFFFFF;
+
+
+  }
+  .TimeLineCardBody{
+    padding: 0rem !important;
+    overflow: hidden;
+    background-color: #FFFFFF;
+  }
+
+
+  #button-holder img{
+    width:30px;
+  }
+  /* .ng-select .ng-clear-wrapper
+  {
+    display: none;
+  } */
+  .ng-select .ng-arrow-wrapper .ng-arrow
+  {
+    border-color: #f7f2f2 transparent transparent;
+  }
+  .ng-dropdown-panel .scroll-host{
+      overflow: hidden !important;
+  }
+  .ng-select {
+
+    /* position: relative;
+    display: block;
+    box-sizing: border-box;
+    margin-left: 10px;
+    margin-right: 60px; */
+    width: 100%;
+
+  }
+  :host >>> .chart-legend .legend-label-text
+  {
+    /* font-size: 15px !important;
+    line-height: 15px; */
+  }
+  :host >>> .chart-legend .legend-labels
+  {
+    background: none;
+    overflow: auto;
+    width: inherit;
+  }
+  :host >>> .chart-legend .legend-label-color{
+    height: 15px;
+  }
+
+  :host >>> .ng-select.ng-select-multiple .ng-select-container .ng-value-container
+  {
+    flex-wrap: nowrap !important;
+  }
+  :host >>> .chart-legend .legend-labels{
+    text-transform: capitalize;
+  }
+  .cardTimeLine {
+    position: relative;
+    display: -ms-flexbox;
+    display: -webkit-box;
+    display: flex;
+    -ms-flex-direction: column;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: .25rem;
+    width: 100%;
+}
+
+
+ .card-body_TimeLine{
+   padding:0rem !important;
+   -webkit-box-flex: 1 !important;
+   flex: 1 1 auto !important;
+   min-height: 1px !important;
+   /* padding: 1.25rem !important; */
+}
+
+ .TimelineCompGraph{
+   display: block;
+   height: auto;
+ }
+ .card-header{
+   font-size: medium;
+   color: black;
+   font-weight: bold;
+ }
+ .cardheader_col{
+  font-size: medium;
+  color: black;
+  font-weight: bold;
+  padding: 0.25rem 0.25rem;
+  margin-bottom: 0;
+  background-color: rgba(0,0,0,.03);
+  border-bottom: 1px solid rgba(0,0,0,.125);
+ }
+ .colrow{
+  position: relative;
+  width: 100%;
+ }
+ .card-footer_TimeLineComp {
+  padding: 0px;
+  /* background-color: rgba(0,0,0,.03); */
+  /* border-top: 1px solid rgba(0,0,0,.125); */
+  height: 60px;
+  z-index: -1;
+}

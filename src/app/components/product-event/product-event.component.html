@@ -1,0 +1,169 @@
+<h2 style="text-align: center; background-color: #36acd2; color :white; font-size: x-large; font-weight: bolder;">
+  Signal Analytics </h2>
+<div class="conatainer-fluid">
+  <div class="row">
+    <div class="col-sm-2">
+      <span class="font-weight-bold my-auto">Domain</span>
+    </div>
+    <div class="col-sm-2">
+      <span class="font-weight-bold my-auto">Select</span>
+
+    </div>
+    <div class="col-sm-2">
+      <span class="font-weight-bold my-auto">Products</span>
+
+    </div>
+
+    <div class="col-sm-2">
+      <span class="font-weight-bold my-auto">Signal</span>
+
+    </div>
+    <div class="col-sm-2">
+      <span class="font-weight-bold my-auto">Information Component</span>
+
+    </div>
+    <div class="col-sm-2">
+      <span class="font-weight-bold my-auto">Signalling Method:</span>
+    </div>
+  </div>
+
+
+
+</div>
+<div class="row">
+  <div class="col-sm-2">
+    <ng-select class="ProEventNgS" [ngbTooltip]="selectedDomain" [items]='domains' bindLabel='name' bindValue='name'
+      [(ngModel)]='selectedDomain' (change)='getProducts(selectedDomain)' [clearable]="false"></ng-select>
+  </div>
+  <div class="col-sm-2">
+    <!-- <ng-select class="ProEventNgS"  [items]="productList" bindLabel="name" bindValue="name" [(ngModel)]="selectedPE"
+        placeholder="Select Product(s)" [searchable]="'true'" [searchWhileComposing]="'true'"
+        [clearSearchOnAdd]="'true'" [virtualScroll]="'true'" (change)="getSignalsData()"></ng-select> -->
+    <ng-select class="ProEventNgS" [ngbTooltip]="selectProductFamily" [items]="productFamily" bindLabel="name"
+      bindValue='name' placeholder="Product Family" [(ngModel)]="selectProductFamily"
+      (change)="getProducts(selectedDomain)" [clearable]="false">
+    </ng-select>
+  </div>
+  <div class="col-sm-2">
+    <ng-select class="ProEventNgS" [ngbTooltip]="selectedPE" [items]="productList" bindLabel="name" bindValue="name"
+      [(ngModel)]="selectedPE" placeholder="Select Product(s)" [searchable]="'true'" [searchWhileComposing]="'true'"
+      [clearSearchOnAdd]="'true'" [loading]="productLoader" [loadingText]="'loading...'" [virtualScroll]="'true'" (change)="getSignalsData()"></ng-select>
+  </div>
+  <div class="col-sm-2">
+    <ng-select class="ProEventNgS" [ngbTooltip]="selectedS" [items]="signals" bindLabel="event_name"
+      bindValue='event_name' [(ngModel)]="selectedS" [searchable]="true" placeholder="Select Signal"
+      [searchWhileComposing]="true" [clearSearchOnAdd]="true" [virtualScroll]="true" [loading]="signalLoader" [loadingText]="'loading...'"
+      (change)="showData(selectedPE, selectedS, selectedParameter)">
+    </ng-select>
+  </div>
+  <div class="col-sm-2">
+    <ng-select class="ProEventNgS" [ngbTooltip]="selectedParameter" [items]="parameters" bindLabel="value"
+      bindValue="value" [(ngModel)]="selectedParameter" [searchable]="true" placeholder="Select Variable"
+      [searchWhileComposing]="true" [clearSearchOnAdd]="true" [virtualScroll]="true"
+      (change)="showData(selectedPE, selectedS, selectedParameter)" [clearable]="true">
+    </ng-select>
+  </div>
+  <div class="col-sm-2">
+    <div class="MeSigMeth">
+      <div>
+        <input [ngbTooltip]="mergesignalmethod" class="InputSigAval" value="{{ mergesignalmethod | uppercase }}"
+          readonly />
+        <!-- <p class="ShwMeth">{{ mergesignalmethod | uppercase }}</p> -->
+        <!-- *ngIf="showSMethod" -->
+      </div>
+    </div>
+  </div>
+
+
+
+</div>
+
+
+
+<div class="row ProEveBox">
+  <div class="col-sm-7">
+    <div class="ProEventCard" *ngIf="showtotalcases">
+      <div class="ProEventCard_Header">
+        <div class="ProEveTotalCount">
+          <div class="row">
+            <h4 class="col-sm-8"><span class="DownloadCases"><b>Total Cases:</b> {{ caseCountNum | number }}</span></h4>
+            <!-- <h1 class="col-sm-1"> -->
+            <!-- -<span class="Download Cases">Total Cases: {{ caseCountNum | number }}</span>-->
+            <!-- </h1> -->
+            <div class="col-sm-4">
+              <!-- <h3 class="DownloadToatacases"><a (click)="downloadallcases()"><span class="Download Cases">Total Cases: {{ caseCountNum | number }}</span></a></h3> -->
+              <button type="button" class="btn btn-primary ProEveBtn" (click)="downloadallcases()"
+                value="Download All Cases"><i class="fa fa-file-excel-o" aria-hidden="true"></i> &nbsp; Download All
+                Cases</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="showChart">
+      <div class="ProEventCard_Body">
+        <ngx-charts-advanced-pie-chart style="color: black !important;" [animations]="animations"
+          [percentageFormatting]="percentageFormatting" [scheme]="pecColor" [results]="result" [label]="'Total Records'"
+          (select)="showCasesData($event, selectedPE, selectedS, selectedParameter)">
+        </ngx-charts-advanced-pie-chart>
+      </div>
+      <div class="ProEventCard_Footer">
+        <div class="ProEveRow">
+          <label>Signal Reviewer's Aggregate Comment:</label>
+        </div>
+        <div *ngIf="comment !== undefined">
+          <div class="ProEveRow">
+            <textarea class="col-sm-11" rows="4" [(ngModel)]='comment.comment' (input)="checkCommentLength(comment.comment)"></textarea>
+          </div>
+          <div class="ProEveRow">
+            <span class="col-sm-9" style="padding-top: 10px;" *ngIf="comment.user !== undefined"><b>Last Updated by
+              </b>{{ comment.user  + ' ' + comment.time_stamp }}</span>
+            <button class="btn-primary col-sm-3 SaveComment" type="button" value="Save Comment"
+              (click)='updateComment()'>Save Comment</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-5">
+    <p-table #dt [columns]="cols" [value]="caseList" [lazy]="true" (onLazyLoad)="loadAERcommentsLazy($event)"
+      [paginator]="true" [totalRecords]="totalRecords" [loading]="loading" [responsive]="true" *ngIf="showcaseslist"
+      [rows]="50" [scrollable]="true" scrollHeight="500px">
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th width="35%"> AER no.</th>
+
+          <th width="65%">Signal Reviewer's Comments</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowData let-i='rowIndex' let-columns="columns">
+        <tr>
+          <td width="35%" style="text-decoration: underline; cursor: pointer;"
+            (click)='showNarrative(rowData.aer_number, rowData.comment, i)'>
+            {{rowData.aer_number}}
+          </td>
+          <td width="65%">
+            <span style="vertical-align: middle; margin-left: .5em" *ngIf="rowData.comment.comment !== undefined">{{ rowData.comment.comment
+                 + ' - ' + rowData.comment.user +
+                 ' - ' + rowData.comment.time_stamp }}</span>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="2" style="text-align:left">No Record found.</td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary">
+        <div class="ui-helper-clearfix" style="text-align: left">
+          <button type="button" pButton icon="pi pi-file-o" iconPos="left" label="CSV" (click)="exportCSV(dt)"
+            style="margin-right: 0.5em;"></button>
+          <button type="button" pButton icon="pi pi-file-excel" iconPos="left" label=" EXCEL"
+            (click)="exportExcelCases()" style="margin-right: 0.5em;" class="ui-button-success"></button>
+
+        </div>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

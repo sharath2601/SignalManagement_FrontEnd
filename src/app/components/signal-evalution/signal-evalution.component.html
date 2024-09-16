@@ -1,0 +1,117 @@
+<button class="btn btn-primary backbtn col-2" (click)="hideLayoutEditor()" *ngIf="show"><i
+    class="fas fa-arrow-alt-circle-left" style="font-size:0.9rem;"> </i> &nbsp; &nbsp;Back</button>
+
+<p-table #dt [value]="currentSignals" [columns]="evalsingcols" dataKey="id" styleClass="ui-table-customers"
+  [rowHover]="true" [rows]="50" [showCurrentPageReport]="true" [rowsPerPageOptions]="[25,50,100]" [paginator]="true"
+  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} records" [filterDelay]="0"
+  selectionMode="multiple" *ngIf="!show">
+  <ng-template pTemplate="header">
+
+    <tr class="SigEvalTrThTr">
+      <!-- <th style="display: none;" pSortableColumn="report_id">Serial No.<p-sortIcon class="Pst" field="user"></p-sortIcon></th> -->
+      <th pSortableColumn="domain">Domain<p-sortIcon class="Pst" field="domain"></p-sortIcon>
+      </th>
+      <th pSortableColumn="product">Product Name<p-sortIcon class="Pst" field="product"></p-sortIcon>
+      </th>
+      <th pSortableColumn="pt">Signal<p-sortIcon class="Pst" field="pt"></p-sortIcon>
+      </th>
+      <th pSortableColumn="signal_code">Signal Code<p-sortIcon class="Pst" field="signal_code"></p-sortIcon>
+      </th>
+      <th pSortableColumn="assigned">Assigned To<p-sortIcon class="Pst" field="assigned"></p-sortIcon>
+      </th>
+      <th pSortableColumn="target_date">Target Date <p-sortIcon class="Pst" field="target_date"></p-sortIcon>
+      </th>
+      <th pSortableColumn="progress">Report Status<p-sortIcon class="Pst" field="progress"></p-sortIcon>
+      </th>
+      <th rowspan="2" pSortableColumn="action">Action<p-sortIcon class="Pst" field="action"></p-sortIcon>
+      </th>
+
+    </tr>
+    <tr>
+      <!-- <th style="display: none;">
+              <input style="border-radius: 10px;text-align: center;font-family: none;" pInputText type="text" (input)="dt.filter($event.target.report_id, 'user', 'contains')" placeholder="Search by User" class="ui-column-filter">
+          </th> -->
+      <th>
+        <input id="sigevelInput11" pInputText type="text" (input)="dt.filter($event.target.value, 'domain', 'contains')"
+          placeholder="Search by Domain" class="ui-column-filter">
+      </th>
+      <th>
+        <input id="sigevelInput1" pInputText type="text" (input)="dt.filter($event.target.value, 'product', 'contains')"
+          placeholder="Search by Product" class="ui-column-filter">
+      </th>
+      <th>
+        <input id="sigevelInput2" pInputText type="text" (input)="dt.filter($event.target.value, 'pt', 'contains')"
+          placeholder="Search by Signal" class="ui-column-filter">
+      </th>
+      <th>
+        <input id="sigevelInput3" pInputText type="text"
+          (input)="dt.filter($event.target.value, 'signal_code', 'contains')" placeholder="Search by Signal Code"
+          class="ui-column-filter">
+      </th>
+      <th>
+        <input id="sigevelInput4" pInputText type="text"
+          (input)="dt.filter($event.target.value, 'assigned', 'contains')" placeholder="Search by Assigned To"
+          class="ui-column-filter">
+      </th>
+      <th>
+        <input id="sigevelInput5" pInputText type="text"
+          (input)="dt.filter($event.target.value, 'target_date', 'contains')" placeholder="Search by Target Date"
+          class="ui-column-filter">
+      </th>
+      <th>
+        <input id="sigevelInput6" pInputText type="text"
+          (input)="dt.filter($event.target.value, 'progress', 'contains')" placeholder="Search by Status"
+          class="ui-column-filter">
+      </th>
+
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-customer>
+    <tr class="ui-selectable-row">
+
+      <td style="display: none;">
+        {{customer.report_id}}
+      </td>
+      <td>
+        <span>{{customer.domain}}</span>
+      </td>
+      <td>
+        <span style="width: 100%;">{{customer.product}}</span>
+      </td>
+      <td>
+        <span style="width: 100%; ">{{customer.pt}}</span>
+      </td>
+      <td>
+        <span style="width: 100%; ">{{customer.signal_code}}</span>
+      </td>
+      <td>
+        <span style="width: 100%; ">{{customer.assigned}}</span>
+      </td>
+      <td>
+        {{ customer.target_date }}
+      </td>
+      <td>
+        <span [class]="'customer-badge status-' + customer.progress">{{ customer.progress }}</span>
+      </td>
+      <td style="cursor: pointer;">
+        <span style="text-decoration: underline; color: blue;" [class]="'customer-badge status-' + customer.progress"
+          (click)="showEditorLayout(customer)">{{customer.progress =="COMPLETED" ? 'View Report' : "View / Edit Report" }}</span>
+      </td>
+
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="8" style="text-align:left">No Record found.</td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="summary">
+    <div class="ui-helper-clearfix" style="text-align: left">
+      <button type="button" pButton icon="pi pi-file-o" iconPos="left" label="Download Report in CSV"
+        (click)="exportCSV(dt)" style="margin-right: 0.5em;"></button>
+      <button type="button" pButton icon="pi pi-file-excel" iconPos="left" label="Download Report in EXCEL"
+        (click)="exportExcel()" style="margin-right: 0.5em;" class="ui-button-success"></button>
+    </div>
+
+  </ng-template>
+</p-table>

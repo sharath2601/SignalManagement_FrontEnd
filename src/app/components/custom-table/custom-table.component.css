@@ -1,0 +1,82 @@
+body .ui-widget {
+    font-family: none !important;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.bg-orange {
+    background-color: #cc9321 !important;
+    color: #ffffff !important;
+}
+
+.bg-red {
+    background-color: red !important;
+}
+
+.show {
+    display: none;
+}
+
+.hide {
+    display: none;
+}
+
+.datatable.ui-paginator {
+    padding: 20px !important;
+}
+
+.date-red {
+    background-color: #c75b54 !important;
+    color: #ffffff !important;
+}
+
+.ng-tns-c454-7 .ui-column-filter .ui-calendar {
+    width: 100% !important;
+}
+
+.Sd_Unhandle {
+    font-size: initial;
+}
+
+.Sd_Unhandle_th {
+    font-size: initial;
+    font-weight: bold;
+}
+
+.adminpencil {
+    text-align: center;
+}
+
+.Detec_Validate_Center {
+    vertical-align: middle;
+    text-align: center;
+    overflow: auto;
+}
+
+.Detec_Validate_Cur {
+    cursor: pointer;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.Detec_Validate_Cur span {
+    text-decoration: underline;
+}
+
+.custTabSoIc {
+    float: right;
+}
+
+#SigValiDeteInput {
+    padding: 0px;
+    width: 100%;
+    font-size: 0.75rem;
+    border-radius: 5px;
+    height: 2rem;
+}
+
+.Detec_Validate_Center {
+    vertical-align: middle;
+    text-align: center;
+    overflow: auto;
+}

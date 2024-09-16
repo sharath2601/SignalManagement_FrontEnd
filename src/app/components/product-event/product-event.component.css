@@ -1,0 +1,134 @@
+:host >>>.advanced-pie-legend {
+
+    font-weight: bold;
+    color: black !important;
+    
+    }
+    .InputSigAval{
+        height: 40px;
+        border: 2px solid #2b5b96 !important;
+        border-radius: 5px !important;
+        width: 100%;
+        background-color: #f1f1f1;
+        cursor: not-allowed;
+    }
+    .ProEveBox{
+        margin-top: 1rem;
+    }
+    .ProEveTotalCount{
+        margin-bottom: 2rem;
+        text-align: center;
+        /* border-bottom: 1px solid; */
+    }
+
+    .ProEveBtn{
+        color: white;
+        font-size: medium;
+        font-weight: bold;
+        text-align: center;
+        
+    }
+    .ProEventCard{
+        position: relative;
+        display: -ms-flexbox;
+        display: -webkit-box;
+        display: flex;
+        -ms-flex-direction: column;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        flex-direction: column;
+        min-width: 0;
+        word-wrap: break-word;
+        background-color: #fff;
+        background-clip: border-box;
+        border: 1px solid rgba(0,0,0,.125);
+        border-radius: .25rem;
+        padding-bottom: 0.85rem;
+        
+    }
+    .ProEventCard_Header{
+        padding: 0.25rem;
+        margin-bottom: 0;
+        height:45px;
+        
+       
+    }
+    .ProEventCard_Body{
+            -ms-flex: 1 1 auto;
+            -webkit-box-flex: 1;
+            flex: 1 1 auto;
+            min-height: 1px;
+            padding: .15rem;
+            height: 220px;
+            width:95%;
+            margin-bottom: 1%;
+            font-size: medium;
+        }
+        .ProEventCard_Footer {
+            padding: .25rem;
+        }
+        .ProEveRow{
+            margin-top: .5rem;
+                display: -ms-flexbox;
+                display: -webkit-box;
+                display: flex;
+                -ms-flex-wrap: wrap;
+                flex-wrap: wrap;
+        }
+        .ProEveRow textarea{
+            border-radius: 5px;
+        }
+        .MeSigMeth{
+            text-align: start;
+            white-space: pre-line;
+            /* padding-top: 0.5rem; */
+           
+    
+        
+        }
+        .ShwMeth{
+            font-size: 0.85rem;
+            color: black;
+            font-weight: bold;
+            height:auto;
+            max-height: 45px;
+            padding-left: 0.5rem;
+            border: 2px solid #2b5b96 !important;
+            border-radius: 5px !important;
+        }
+        
+    
+        .SaveComment{
+            color: #fff !important;
+            background-color: #2b5b96 !important;
+            width: auto;
+            /* height: auto; */
+            border: white !important;
+            /* box-shadow: 2px 2px 5px #888888; */
+            border-radius: 5px !important;
+            font-size: small;
+            font-weight: bolder;
+        
+        }
+        .DownloadToatacases{
+            text-decoration: underline;
+            color: blue;
+            cursor: pointer;
+            text-align: right;
+            vertical-align: middle;
+            float: left;
+            text-align: left;
+        }
+        .DownloadCases{
+            text-align: left;
+            float: left;
+        }
+        .AERHeader{
+            text-align: center;
+            font-size: x-large;
+        }
+        .AERHEaderName{
+            color: black;
+        }
+        
+        

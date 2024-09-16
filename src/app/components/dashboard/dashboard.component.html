@@ -1,0 +1,587 @@
+<div class="pd-container dashboardmaincontainer" id="maindashboard">
+  <div class="row SelectProducts">
+    <div class="col-sm-2 dashboardSelect">
+      <!-- <h4 style="padding-top: 5px;font-size:1vw;">Select Domain</h4> -->
+
+      <ng-select
+        [items]="productTypes"
+        bindLabel="name"
+        placeholder="Select Domain"
+        [(ngModel)]="selectDomainType"
+        (change)="onChnagedropdown(selectDomainType, 'domain')"
+        [clearable]="false"
+      >
+      </ng-select>
+    </div>
+    <div class="col-sm-2 dashboardSelect">
+      <!-- <h4 style="padding-top: 5px;font-size:1vw;">Select Domain</h4> -->
+
+      <ng-select
+        [items]="productFamily"
+        bindLabel="name"
+        placeholder="Product Family"
+        [(ngModel)]="selectProductFamily"
+        (change)="onChnagedropdown(selectProductFamily, 'ProductFamily')"
+        [clearable]="false"
+      >
+      </ng-select>
+    </div>
+    <div class="col-sm-4 dashboardSelect">
+      <!-- <h3 style="padding-top: 12px;font-size:1vw;font-weight: bold;">Product</h3> -->
+      <ng-select
+        class="custom"
+        [items]="productList"
+        bindLabel="name"
+        [multiple]="true"
+        placeholder="All Product(s)"
+        (change)="onChnagedropdown(selectedProduct, 'product')"
+        [(ngModel)]="selectedProduct"
+        [maxSelectedItems]="5"
+      >
+        <ng-template
+          ng-option-tmp
+          let-item="item"
+          let-item$="item$"
+          let-index="index"
+        >
+          <input
+            id="item-{{ index }}"
+            type="checkbox"
+            [ngModel]="item$.selected"
+          />
+          {{ item.name }}
+        </ng-template>
+      </ng-select>
+    </div>
+    <div class="col-sm-2 dashboardSelect">
+      <!-- <h3 style="padding-top: 12px;font-size:1vw;font-weight: bold;">Period</h3> -->
+      <ng-select
+        [items]="quarter"
+        bindLabel="name"
+        groupBy="Year"
+        [multiple]="true"
+        [compareWith]="compareAccounts"
+        [selectableGroup]="true"
+        placeholder="All Period(s)"
+        [(ngModel)]="selectedPeriod"
+        [maxSelectedItems]="5"
+        (change)="onChnagedropdown(selectedPeriod, 'quarter')"
+      >
+        <ng-template
+          ng-option-tmp
+          let-item="item"
+          let-item$="item$"
+          let-index="index"
+        >
+          <input
+            id="item-{{ index }}"
+            type="checkbox"
+            [ngModel]="item$.selected"
+          />
+          {{ item.name }}
+        </ng-template>
+      </ng-select>
+    </div>
+
+    <div class="col-sm-2 dashboardSelect">
+      <!-- <div id='button-holder'>
+        <img src='../../../assets/img/searchicon.jpg' style="transform: rotate(95deg);margin-top: 10px;" />
+      </div> -->
+      <ng-select
+        [ngbTooltip]="selectedS"
+        [items]="signals"
+        bindLabel="name"
+        bindValue="name"
+        [(ngModel)]="selectedS"
+        [searchable]="true"
+        [placeholder]="placeholderPTName"
+        [searchWhileComposing]="true"
+        [clearSearchOnAdd]="true"
+        [virtualScroll]="true"
+        (change)="onChnagedropdown(selectedS, 'selectedPTdata')"
+      >
+      </ng-select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-4">
+      <div class="card" style="background-color: #0c41a2;">
+        <div class="card-body">
+          <ngx-charts-advanced-pie-chart
+            [scheme]="colorScheme"
+            [results]="single"
+            [label]="'Signals Detected'"
+            [percentageFormatting]="percentageFormatting"
+            (select)="onSelect($event, '/signal-detection', 'detect', false)"
+          >
+          </ngx-charts-advanced-pie-chart>
+        </div>
+        <div class="card-footer_dashboard text-center"></div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="card" style="background-color: #0c41a2;">
+        <div class="card-body">
+          <ngx-charts-advanced-pie-chart
+            [scheme]="colorScheme"
+            [results]="single1"
+            [label]="'Signals Validated'"
+            [animations]="animations"
+            [percentageFormatting]="percentageFormatting"
+            (select)="onSelect($event, '/signal-tracking', 'validate', false)"
+          >
+          </ngx-charts-advanced-pie-chart>
+        </div>
+        <div class="card-footer_dashboard text-center">
+          <b>*Custom Count: &nbsp;{{ customcount }}</b>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="card" style="background-color: #0c41a2;">
+        <div class="card-body">
+          <ngx-charts-advanced-pie-chart
+            [scheme]="colorScheme"
+            [results]="single2"
+            [label]="'Signals Evaluated'"
+            [animations]="animations"
+            [percentageFormatting]="percentageFormatting"
+            (select)="onSelect($event, '/signal-evaluation', 'evaluate', false)"
+          >
+          </ngx-charts-advanced-pie-chart>
+        </div>
+        <div class="card-footer_dashboard text-center"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" style="margin-top: 1%;">
+    <div class="col-8">
+      <div class="row">
+        <div class="col-sm4 col-md-4 col-8 mb-2">
+          <div class="div">
+            <div class="leftCap">
+              <p>Total No. of Drugs</p>
+            </div>
+            <div class="rightCap">
+              <p>{{ drugcount | number }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm4 col-md-4 col-8 mb-2">
+          <div class="div">
+            <div class="leftCap">
+              <p>Total No. of Cosmetics</p>
+            </div>
+            <div class="rightCap">
+              <p>{{ cosmeticcount | number }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm4 col-md-4 col-8 mb-2">
+          <div class="div">
+            <div class="leftCap">
+              <p>Total No. of Devices</p>
+            </div>
+            <div class="rightCap">
+              <p>{{ devicecount | number }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top: 2%;"></div>
+      <div class="row">
+        <div class="col-sm4 col-md-4 col-8 mb-2">
+          <div class="div">
+            <div class="leftCap">
+              <p>Product(s) for Selected Event(s)</p>
+            </div>
+            <div class="rightCap item-hover" (click)="showproducts()">
+              <p>{{ noOfProductbyEvent | number }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm4 col-md-4 col-8 mb-2">
+          <div class="div">
+            <div class="leftCap">
+              <p>Event(s) for Selected Product(s)</p>
+            </div>
+            <div class="rightCap item-hover" (click)="showevents()">
+              <p>{{ noOfPTbyproduct | number }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm4 col-md-4 col-8 mb-2">
+          <div class="div">
+            <div class="leftCap">
+              <p>Total Cases</p>
+            </div>
+            <div class="rightCap">
+              <p>{{ totalcases | number }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="card" style="background-color: #0c41a2;">
+        <div class="card-body">
+          <ngx-charts-advanced-pie-chart
+            [scheme]="colorScheme"
+            [results]="single3"
+            [label]="'Signal Management Overview'"
+            [animations]="animations"
+            [percentageFormatting]="percentageFormatting"
+            (select)="
+              onSelect($event, '/signal-detection', 'detectstatus', false)
+            "
+          >
+          </ngx-charts-advanced-pie-chart>
+        </div>
+        <div class="card-footer_dashboard text-center"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<p-dialog
+  header="Products"
+  [(visible)]="displayProduct"
+  [modal]="true"
+  [style]="{ width: '50vw' }"
+  [baseZIndex]="100"
+  [draggable]="false"
+  [resizable]="false"
+  scrollHeight="500px"
+  height="400"
+  (onHide)="close(dt)"
+>
+  <p-table
+    #dt
+    [columns]="productcols"
+    [value]="productnameshow"
+    [responsive]="true"
+    [scrollable]="true"
+    scrollHeight="300px"
+  >
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th pSortableColumn="product_name">
+          Product Name(s)<p-sortIcon field="product_name"></p-sortIcon>
+        </th>
+      </tr>
+
+      <tr>
+        <th>
+          <input
+            pInputText
+            type="text"
+            (input)="dt.filter($event.target.value, 'product_name', 'contains')"
+            placeholder="Search by Product"
+            class="ui-column-filter"
+            [value]="
+              dt.filters['product_name'] ? dt.filters['product_name'].value : ''
+            "
+          />
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+      <tr>
+        <td *ngFor="let col of columns">
+          <!-- <span class="ui-column-title">{{col.header}}</span> -->
+          {{ rowData[col.field] }}
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      There are {{ productnameshow?.length }} Products
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="1" style="text-align: left;">No Record found.</td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      <div class="ui-helper-clearfix" style="text-align: left;">
+        <button
+          type="button"
+          pButton
+          icon="pi pi-file-o"
+          iconPos="left"
+          label=" CSV"
+          (click)="exportCSV(dt)"
+          style="margin-right: 0.5em;"
+        ></button>
+        <button
+          type="button"
+          pButton
+          icon="pi pi-file-excel"
+          iconPos="left"
+          label=" EXCEL"
+          (click)="exportExcel()"
+          style="margin-right: 0.5em;"
+          class="ui-button-success"
+        ></button>
+      </div>
+    </ng-template>
+  </p-table>
+  <p-footer>
+    <button
+      type="button"
+      pButton
+      icon="pi pi-times"
+      (click)="displayProduct = false"
+      label="Close"
+    ></button>
+
+    <!-- <button type="button" pButton icon="pi pi-times" (click)="displayModal=false" label="No" class="ui-button-secondary"></button> -->
+  </p-footer>
+</p-dialog>
+<p-dialog
+  [(visible)]="displayEvents"
+  [modal]="true"
+  [style]="{ width: '50vw' }"
+  [baseZIndex]="100"
+  [draggable]="false"
+  [resizable]="false"
+  height="400"
+  (onHide)="close(dt1)"
+>
+  <p-header>
+    <b>Product:</b>&nbsp;{{ ShowSelectedProd }} &nbsp; || &nbsp;
+    <b>Period:</b>&nbsp;{{ showselectedQuarter }}
+  </p-header>
+  <p-table
+    #dt1
+    [columns]="eventcols"
+    [value]="eventnameshow"
+    [responsive]="true"
+    [scrollable]="true"
+    scrollHeight="300px"
+  >
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th pSortableColumn="event_name">
+          Event Name<p-sortIcon field="name"></p-sortIcon>
+        </th>
+        <th pSortableColumn="case_count">
+          Frequency of Event Reported<p-sortIcon
+            field="case_count"
+          ></p-sortIcon>
+        </th>
+      </tr>
+      <tr>
+        <th>
+          <input
+            pInputText
+            type="text"
+            (input)="dt1.filter($event.target.value, 'event_name', 'contains')"
+            placeholder="Search by Events"
+            class="ui-column-filter"
+            [value]="
+              dt1.filters['event_name'] ? dt1.filters['event_name'].value : ''
+            "
+          />
+        </th>
+        <th>
+          <input
+            pInputText
+            type="text"
+            (input)="dt1.filter($event.target.value, 'case_count', 'contains')"
+            placeholder="Search by Count"
+            class="ui-column-filter"
+            [value]="
+              dt1.filters['case_count'] ? dt1.filters['case_count'].value : ''
+            "
+          />
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+      <tr>
+        <td>
+          {{ rowData.event_name }}
+        </td>
+        <td
+          style="text-decoration: underline; cursor: pointer;"
+          (click)="openRelatedIcsrList(rowData)"
+        >
+          {{ rowData.case_count }}
+        </td>
+      </tr>
+    </ng-template>
+    <!-- <ng-template pTemplate="summary">
+
+      </ng-template> -->
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="2" style="text-align: left;">No Record found.</td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      There are {{ eventnameshow?.length }} Events
+      <div class="ui-helper-clearfix" style="text-align: left;">
+        <button
+          type="button"
+          pButton
+          icon="pi pi-file-o"
+          iconPos="left"
+          label=" CSV"
+          (click)="exportCSV1(dt1)"
+          style="margin-right: 0.5em;"
+        ></button>
+        <button
+          type="button"
+          pButton
+          icon="pi pi-file-excel"
+          iconPos="left"
+          label=" EXCEL"
+          (click)="exportExcelevent()"
+          style="margin-right: 0.5em;"
+          class="ui-button-success"
+        ></button>
+      </div>
+    </ng-template>
+  </p-table>
+  <p-footer>
+    <button
+      type="button"
+      pButton
+      icon="pi pi-times"
+      (click)="displayEvents = false"
+      label="Close"
+    ></button>
+    <!-- <button type="button" pButton icon="pi pi-times" (click)="displayModal=false" label="No" class="ui-button-secondary"></button> -->
+  </p-footer>
+</p-dialog>
+<p-dialog
+  header="Details"
+  [(visible)]="displaycase"
+  [modal]="true"
+  [style]="{ width: '50vw' }"
+  [baseZIndex]="1000"
+  [draggable]="false"
+  [resizable]="false"
+  height="400"
+>
+  <div style="padding-left: 5%;">
+    <div class="row">
+      <label class="font-weight-bold">
+        <b>Product Name: </b>{{ ShowSelectedProd }}
+      </label>
+    </div>
+    <div class="row">
+      <label class="font-weight-bold">
+        <b>Period: </b>{{ showselectedQuarter }}
+      </label>
+    </div>
+    <div class="row">
+      <label class="font-weight-bold"> <b>Event: </b> {{ icsrevent }} </label>
+    </div>
+  </div>
+  <!-- <p-table #dt2 [columns]="icsrcols" [value]="icsrList" [responsive]="true" scrollHeight="500px" [rowHover]="true" [rows]="50" [lazy]="true" (onLazyLoad)="loadAERcommentsLazy($event)"  [rowsPerPageOptions]="[10,25,50]"  [paginator]="true"
+     [filterDelay]="0"  scrollHeight="500px" *ngIf="showcaseslist" [totalRecords]="totalRecords" > -->
+
+  <p-table
+    #dtcases
+    [columns]="icsrcols"
+    [value]="icsrList"
+    [lazy]="true"
+    (onLazyLoad)="loadAERcommentsLazy($event)"
+    [paginator]="true"
+    [totalRecords]="totalRecords"
+    [loading]="loading"
+    [responsive]="true"
+    *ngIf="showcaseslist"
+    [rows]="50"
+    [scrollable]="true"
+    scrollHeight="200px"
+  >
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th *ngFor="let col of columns">
+          {{ col.header }}
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+      <tr>
+        <td>
+          {{ rowData.aer_number }}
+        </td>
+        <td>
+          <span
+            *ngIf="
+              rowData.comment.comment !== undefined ||
+              rowData.comment !== undefined
+            "
+            style="vertical-align: middle; margin-left: 0.5em;"
+            >{{
+              rowData.comment.comment
+                ? rowData.comment.comment
+                : "" + " - " + rowData.comment.user
+                ? rowData.comment.user
+                : "" + " - " + rowData.comment.time_stamp
+                ? rowData.comment.time_stamp
+                : ""
+            }}</span
+          >
+          <!-- <span *ngIf="rowData.comment.comment !== undefined " style="vertical-align: middle; margin-left: .5em">{{rowData.comment.comment? rowData.comment.comment : ''  + ' - ' + ' - ' + rowData.comment.time_stamp ? rowData.comment.time_stamp : ''}}</span> -->
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="2" style="text-align: left;">No Record found.</td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      <div class="ui-helper-clearfix" style="text-align: left;">
+        <button
+          type="button"
+          pButton
+          icon="pi pi-file-o"
+          iconPos="left"
+          label=" CSV"
+          (click)="exportCSVcases(dtcases)"
+          style="margin-right: 0.5em;"
+        ></button>
+        <button
+          type="button"
+          pButton
+          icon="pi pi-file-excel"
+          iconPos="left"
+          label=" EXCEL"
+          (click)="exportExcelCases()"
+          style="margin-right: 0.5em;"
+          class="ui-button-success"
+        ></button>
+
+        <button
+          type="button"
+          pButton
+          icon="pi pi-file-o"
+          iconPos="left"
+          label="All cases Details"
+          (click)="downloadAllCases()"
+          style="margin-right: 0.5em;"
+        ></button>
+      </div>
+    </ng-template>
+  </p-table>
+  <p-footer>
+    <button
+      type="button"
+      pButton
+      icon="pi pi-times"
+      (click)="displaycase = false"
+      label="Close"
+    ></button>
+  </p-footer>
+</p-dialog>
+
+<div class="d-flex float-right dashboardmargin">
+  <button class="btn btn-primary" (click)="download()">
+    Download<fa-icon [icon]="faDownload" size="xs"></fa-icon>
+  </button>
+</div>

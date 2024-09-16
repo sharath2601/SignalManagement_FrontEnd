@@ -1,0 +1,27 @@
+.SigTrackcustLable{
+    padding-top: 1rem; font-size: larger;font-weight: bold;
+}
+.SigTrackcustLableList{
+    padding-top: 0.5rem; font-size: larger;font-weight: bold; text-align: left;
+
+}
+.SigTrackcustLableList_Mid{
+    padding-top: 0.5rem; font-size: larger;font-weight: bold;    padding-right: -15px !important;
+    padding-left: -15px !important;
+}
+.group1, .group2{
+    display: flex;
+    padding-right: -15px;
+    padding-left: -15px;
+}
+.SigTrackHead{
+    text-align: center;
+    font-size: x-large;
+    font-weight: bold;
+    color: #265690;
+}
+.borderDiv{
+    padding: 20px;
+    border: 1px solid;
+    border-radius: 5px;
+}

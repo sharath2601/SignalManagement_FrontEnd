@@ -1,0 +1,377 @@
+<div class="container-fluid">
+  <!--modal for signal detection-->
+  <div class="modal-body" *ngIf="!showSignalTrackModal">
+    <table class="table table-bordered" *ngIf="!isPtClicked || !showIcsrModal">
+      <thead>
+        <tr>
+          <th>PT</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="
+            let item of modalContent
+              | paginate: { itemsPerPage: 6, currentPage: currentPage };
+            let i = index
+          "
+        >
+          <td class="case-count" (click)="getICSRS(item.name)">
+            {{ item.name }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="row" *ngIf="isPtClicked || showIcsrModal">
+      <div class="col-sm-4">
+        <label class="font-weight-bold"
+          >Product: {{ selSigItem.product }}</label
+        >
+      </div>
+      <div class="col-sm-4">
+        <label class="font-weight-bold">Event: {{ selSigItem.name }}</label>
+      </div>
+      <div class="col-sm-4">
+        <label class="font-weight-bold"
+          >Total Cases: {{ selSigItem.caseCount }}</label
+        >
+      </div>
+      <!-- <div class="col-sm-3">
+        <label class="font-weight-bold"
+          >Current Quarter Cases: {{ selSigItem.current_review_period }}</label
+        >
+      </div> -->
+    </div>
+
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <ng-select
+          *ngIf="!showQuarterDropdown"
+          [items]="qList"
+          placeholder="All Quarter(s)"
+          [(ngModel)]="selQ"
+          [searchable]="true"
+          bindLabel="name"
+          bindValue="name"
+          groupBy="Year"
+          maxSelectedItems="5"
+          [multiple]="true"
+          [clearable]="true"
+          [loading]="loadData"
+          [virtualScroll]="true"
+          (change)="onQuarterChange(selQ)"
+        >
+        </ng-select>
+      </div>
+    </div>
+
+    <div class="row mt-2">
+      <div class="mx-3" *ngIf="qSel && countLessThanReq(totalCount)" >
+        {{ "showing " + icsrList.length + " cases"}}
+      </div>
+    </div>
+
+    <div class="row mt-2" *ngIf="totalCount > 50">
+      <div class="mx-3">
+        {{
+          "showing " +
+            startCount +
+            " - " +
+            endCount +
+            " of " +
+            totalCount +
+            " cases"
+        }}
+      </div>
+      <div class="mx-1" (click)="getSet(50, 50, 'prev')">
+        <i
+          class="pi pi-chevron-left"
+          [ngClass]="{
+            'enabled-arrows': startCount !== 1,
+            'disabled-arrows': startCount === 1
+          }"
+        ></i>
+      </div>
+      <div class="mx-1" aria-label="Next Set" (click)="getSet(50, 50, 'next')">
+        <i
+          class="pi pi-chevron-right"
+          [ngClass]="reachedEnd ? 'disabled-arrows' : 'enabled-arrows'"
+        ></i>
+      </div>
+    </div>
+
+    <p-table
+      [value]="icsrList"
+      [paginator]="true"
+      [rows]="5"
+      [loading]="loadingData"
+    >
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th width="25%">AER No.</th>
+          <th>Signal Reviewer's Comment</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowData let-i="rowIndex">
+        <tr>
+          <td
+            class="case-count"
+            (click)="
+              getIndividualNarratvie(rowData.aer_number, rowData.comment, i)
+            "
+          >
+            {{ rowData.aer_number }}
+          </td>
+          <td>
+            <span *ngIf="rowData.comment.comment !== undefined">
+              {{
+                rowData.comment.comment +
+                  " - " +
+                  rowData.comment.user +
+                  " - " +
+                  rowData.comment.time_stamp
+              }}
+            </span>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="2" style="text-align: left;">No Record found.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+
+    <div
+      id="stat-sig-section"
+      class="mt-3"
+      *ngIf="selSigItem.signal_id !== -1 && whichPage === 'unhandledPage'"
+    >
+      <div class="row">
+        <div class="col-sm-6">
+          <label class="font-weight-bold">Short Comment</label>
+          <ng-select
+            [items]="validationList"
+            bindLabel="itemName"
+            bindValue="itemName"
+            [(ngModel)]="selectedValidItem"
+            placeholder="Select Value"
+            [clearable]="false"
+          >
+          </ng-select>
+        </div>
+
+        <!-- <div class="col-sm-6">
+          <label class="font-weight-bold">Previous Short Comment</label>
+          <div>Previously validated short commment comes here</div>
+        </div> -->
+      </div>
+
+      <div class="mt-3">
+        <label class="font-weight-bold"
+          >Signal Reviewer's Aggregate Comment</label
+        >
+        <input
+          type="textarea"
+          id="stat-sig-com"
+          (input)="checkCommentLength(selSigItem.statSigComment.comment)"
+          [(ngModel)]="selSigItem.statSigComment.comment"
+          class="form-control col-sm-6"
+        />
+        <span *ngIf="selSigItem.statSigComment.user !== undefined && selSigItem.statSigComment.user.length > 0">
+          <b>Last Updated By </b
+          >{{
+            selSigItem.statSigComment.user +
+              " - " +
+              selSigItem.statSigComment.time_stamp
+          }}
+        </span>
+      </div>
+    </div>
+
+    <div class="btn-section mt-3">
+      <button
+        *ngIf="selSigItem.signal_id !== -1 && whichPage === 'unhandledPage'"
+        type="button"
+        [disabled]="selSigItem.short_comment === 'Valid'"
+        class="btn btn-primary col-sm-2"
+        (click)="updateStatSig(selSigItem.statSigComment, selectedValidItem)"
+      >
+        Update Signal
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-primary col-sm-2 ml-2"
+        (click)="closeModal()"
+      >
+        Close
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary col-sm-2 mx-2"
+        (click)="
+          downloadAllCases(
+            selSigItem.domain,
+            selQ,
+            selSigItem.product,
+            selSigItem.name
+          )
+        "
+      >
+        Download Case Details
+      </button>
+    </div>
+  </div>
+
+  <!--modal for signal tracking-->
+  <div class="modal-body" *ngIf="showSignalTrackModal">
+    <div class="SigTrackHead">Signal Information</div>
+    <div style="margin-bottom: 2%;"></div>
+    <div class="borderDiv">
+      <div class="row">
+        <div class="col-sm-4 SigTrackcustLable">
+          <label for="TextEditot"> Signal Reviewer's Aggregate Comment</label>
+        </div>
+        <div class="col-sm-8">
+          <textarea
+            class="form-control"
+            type="text"
+            id="old-comment"
+            [ngModel]="pComment"
+            [disabled]="true"
+          ></textarea>
+          <span *ngIf="sigTrackData.comment.user !== undefined">
+            <b>Last Updated by </b
+            >{{
+              sigTrackData.comment.user +
+                " - " +
+                sigTrackData.comment.time_stamp
+            }}
+          </span>
+        </div>
+      </div>
+      <div style="margin-bottom: 2%;"></div>
+
+      <div class="row mt-3">
+        <div class="col-sm-8">
+          <label for="AssTo">Assign To</label>
+          <ng-select
+            [items]="usersList"
+            [multiple]="true"
+            bindLabel="itemName"
+            bindValue="itemName"
+            [(ngModel)]="selectedUser"
+            [maxSelectedItems]="5"
+            [clearable]="false"
+          >
+            <ng-template
+              ng-option-tmp
+              let-item="item"
+              let-item$="item$"
+              let-index="index"
+            >
+              <input
+                id="item-{{ index }}"
+                type="checkbox"
+                [ngModel]="item$.selected"
+              />
+              {{ item.itemName }}
+            </ng-template>
+          </ng-select>
+        </div>
+        <div class="col-sm-4">
+          <label for="Priority">Priority</label>
+          <ng-select
+            [items]="priorityList"
+            bindLabel="itemName"
+            bindValue="itemName"
+            [(ngModel)]="selectedPriority"
+            [clearable]="false"
+            (change)="onItemSelect(selectedPriority)"
+          ></ng-select>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-sm-6">
+          <label for="Reson">Reason for Grade Selection</label>
+          <ng-select
+            [items]="gradeValidation"
+            bindLabel="itemName"
+            bindValue="itemName"
+            [(ngModel)]="selGradeReason"
+            [clearable]="false"
+          ></ng-select>
+        </div>
+        <div class="col-sm-6">
+          <label for="Reson">Status</label>
+          <ng-select
+            [items]="statusList"
+            bindLabel="itemName"
+            bindValue="itemName"
+            [(ngModel)]="selectedStatus"
+            [clearable]="false"
+          ></ng-select>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-sm-6">
+          <label for="Target">Target Date</label>
+          <input
+            type="text"
+            class="form-control mb-3"
+            [ngModel]="selectedDate"
+            [disabled]="true"
+          />
+        </div>
+        <div class="col-sm-6">
+          <label for="Target">Add Note</label>
+          <input
+            class="form-control mb-3"
+            type="text"
+            id="new-comment"
+            (input)="checkCommentLength(nComment)"
+            [(ngModel)]="nComment"
+            placeholder="Add Note"
+            maxlength="1000"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col-12 col-md-12 btn-row">
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="
+            updateSignal(
+              nComment,
+              selectedPriority,
+              selectedUser,
+              selectedStatus,
+              selGradeReason,
+              selectedDate
+            )
+          "
+        >
+          Update Signal
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-primary ml-2"
+          (click)="closeModal()"
+        >
+          Close
+        </button>
+        <button
+          type="button"
+          class="btn btn-danger float-right pull-right"
+          (click)="deleteValidSignal()"
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

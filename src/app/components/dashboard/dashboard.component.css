@@ -1,0 +1,271 @@
+.table-titles {
+  color: #265690;
+  font-size: 16px;
+}
+
+:host >>> ngx-charts-number-card .cell .trimmed-label {
+
+  font-size: large;
+  pointer-events: none;
+  overflow: hidden;
+  text-align: left;
+  line-height: 1em;
+  font-weight: 1000px;
+
+}
+:host >>> pie-label {
+  font-size: 20px;
+}
+.ng-star-inserted{
+  font-size: 14px;
+}
+.dashboardSelect{
+  height:auto;
+}
+/* .ng-select {
+  position: relative;
+  display: block;
+  box-sizing: border-box;
+  height: 45px !important;
+} */
+.ng-star-inserted > .tick > text{
+  font-size: 1rem;
+}
+
+.ng-dropdown-panel.ng-select-bottom{
+  border: 2px solid black !important;
+  z-index: 1;
+}
+.ngx-charts > text { font-size: 20px;  }
+ g > .pie-label {
+  font-size: 20px !important;
+  }
+  /* g > text {
+    font-size: 20px !important;
+    } */
+
+
+  .pie-label {
+  font-size: 20px !important;
+  }
+  .advanced-pie-legend .total-value {  font-size: 30px !important;}
+
+  .advanced-pie-legend { font-weight: bold; color: white; }
+
+  .signaldetection:hover{
+  box-shadow: 10px 10px 5px grey;
+  cursor: pointer;
+  }
+.ng-select .ng-select-container{
+
+
+  font-weight: bold;
+
+  padding: 0px !important;
+
+  margin: 0px !important;
+  }
+
+.ng-select.ng-select-single .ng-select-container{
+
+font-weight: bold;
+
+padding: 0px !important;
+
+margin: 0px !important;
+}
+.search-text-input{
+  border-top:thin solid  #e5e5e5;
+  border-right:thin solid #e5e5e5;
+  border-bottom:0;
+  border-left:thin solid  #e5e5e5;
+  box-shadow:0px 1px 1px 1px #e5e5e5;
+  float:left;
+  height:17px;
+  outline:0;
+  padding:.4em 0 .4em .6em;
+  width:183px;
+}
+
+#button-holder{
+  background-color:white;
+  border-top:thin solid #e5e5e5;
+  box-shadow:1px 1px 1px 1px #e5e5e5;
+  cursor:pointer;
+  float:left;
+  height:50px;
+  text-align:center;
+  width:50px;
+}
+
+#button-holder img{
+  width:30px;
+}
+/* .ng-select .ng-clear-wrapper
+{
+  display: none;
+} */
+.ng-select .ng-arrow-wrapper .ng-arrow
+{
+  border-color: #000 transparent transparent;
+}
+.ng-select {
+
+  /* position: relative;
+  display: block;
+  box-sizing: border-box;
+  margin-left: 10px;
+  margin-right: 60px; */
+  width: 100%;
+
+}
+.block {
+  text-align: center;
+  vertical-align: middle;
+}
+.circle {
+  background: #2f5695;
+  border-radius: 160px;
+  color: white;
+  height: 128px;
+  font-weight: bold;
+  width: 270px;
+  display: table;
+  /* margin: 20px auto; */
+}
+.circle p {
+  vertical-align: middle;
+  /* display: table-cell; */
+  font-size: 24px !important;
+  font-weight: bold;
+  color: white;
+}
+
+.top-left {
+  position: absolute;
+  top: 33px;
+  left: 41px;
+  color: white;
+  font-weight: bold;
+}
+
+/* Top right text */
+.top-right {
+  position: absolute;
+  top: 25%;
+  right: 15%;
+  font-weight: bold;
+}
+.dashboardmargin
+{
+  margin-bottom: 1%;
+margin-right: 1%;
+}
+.dashboardmaincontainer{
+  margin-top: .5% !important;
+}
+.ui-datatable-tablewrapper{
+  min-height: 500px;
+  max-height: 500px;;
+  }
+  /* .ui-table{
+    min-height: 65vh;
+  } */
+  /* .ui-table-scrollable-view{
+    min-height: 65vh;
+
+  } */
+  /* .ui-dialog .ui-dialog-content{
+    min-height: 600px;
+  } */
+
+
+
+  /* div */
+
+  .div {
+    height: 5.5rem;
+    width: auto;
+    margin: 0 auto;
+    background: transparent;
+    border-radius: 80px ;
+
+  }
+
+  .div .leftCap {
+    width: 50%;
+    height: 100%;
+    border-radius: 80px;
+    display: table;
+    text-align: center;
+    border: 1px solid #000;
+    border-right:0px;
+
+  }
+  .div .leftCap p{
+    vertical-align: middle;
+    text-align: center;
+    display: table-cell;
+    color: white;
+    font-weight: bold;
+    font-size: 0.85rem;
+}
+
+  .div .rightCap {
+    width: 50%;
+    height: 100%;
+    border-radius: 80px ;
+    display: table;
+    text-align: center;
+    border: 1px solid #000;
+    border-left:0px;
+
+    }
+    .div .rightCap p{
+      vertical-align: middle;
+      text-align: center;
+      display: table-cell;
+      color: black;
+      font-weight: bold;
+      font-size: 1.5rem;
+  }
+  .rightCap {
+    float: right;
+    background-color:#FFFFFF;
+    border-left: 2px solid #FFFFFF;
+    /* margin-right: -2px; */
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+  }
+
+  .leftCap {
+    float: left;
+    background-color:#0c41a2;
+    border-right: 2px solid #0c41a2;
+    /* margin-right: -2px; */
+   border-top-right-radius: 0 !important;
+   border-bottom-right-radius: 0 !important;
+  }
+
+  .card {
+    border-radius: 25px !important;
+    /* box-shadow: 5px 5px 30px 7px rgba(0,0,0,0.25), -5px -5px 30px 7px rgba(0,0,0,0.22) !important; */
+    height: 200px;
+    width: 100%;
+
+  }
+  .card-body{
+    padding: 0rem !important;
+    overflow: hidden;
+  }
+  .card-footer_dashboard {
+    padding: .25rem 0.25rem !important;
+    color: white !important;
+    background-color: rgba(251, 251, 251, 0) !important;
+    border-top: 0px !important;
+    font-size: smaller !important;
+  }
+
+.SelectProducts{
+  margin-bottom: 2rem;
+}

@@ -1,0 +1,11 @@
+.autTrilPSI{
+    float: right;
+}
+
+#Audit_1,#Audit_2,#Audit_3,#Audit_4{
+    padding: 0px;
+    width: 100%;
+    font-size: 0.75rem;
+    border-radius: 5px;
+    height: 2rem;
+  }

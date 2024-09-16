@@ -1,0 +1,64 @@
+<nav class="navbar navbar-expand-lg navbar-light tpmenus"  *ngIf="showheader">
+  <a class="navbar-brand"><img src="assets/img/hdr-mai-signal-logo.png" width="150" height="51"></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav ml-auto">
+      <li id="admin-dashboard" *ngIf="showAdminDashboard">
+        <a [routerLink]='routeToAdminDashboard' routerLinkActive="is-active">Administrator</a>
+      </li>
+      <li class="nav-item dropdown dashbaorddropdown">
+        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="menu" aria-haspopup="true" routerLink="/dashboard-cont" routerLinkActive="active"
+         aria-expanded="false">{{ selectedDrpdwn }}</a>
+        <ul id="dropdownmenu" class="dropdown-menu" role="menu" aria-labelledby="navbarDropdown">
+          <li class="dropdown-item" (click)="changePage('/dashboard-cont/dashboard', 'Dashboard')"
+           routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <a
+            >Dashboard</a>
+            </li>
+          <li class="dropdown-item" (click)="changePage('/dashboard-cont/trends', 'Timeline Comparison')"
+          routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <a>Timeline Comparison</a>
+            </li>
+          <li class="dropdown-item" (click)="changePage('/dashboard-cont/product-event', 'Signal Analytics')"
+          routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <a >Signal Analytics</a>
+            </li>
+        </ul>
+      </li>
+      <li id="signal-detection">
+        <a [routerLink]='routeToSignalDetection' routerLinkActive="is-active">Signal
+          Detection & Validation</a>
+      </li>
+
+      <li id="signal-tracking">
+        <a [routerLink]='routeToSignalTracking' routerLinkActive="is-active">Signal
+          Planning & Tracking</a>
+      </li>
+      <li id="report-generation">
+        <a [routerLink]='routeToSignalEvaluation' routerLinkActive="is-active">Signal
+          Evaluation Report</a>
+      </li>
+      <li id="audit-trail">
+        <a [routerLink]='routeToAuditTrail' routerLinkActive="is-active">Audit Trail</a>
+      </li>
+      <li data-toggle="tooltip" data-placement="right" title="calendar">
+        <a [routerLink]='routeToCalender' routerLinkActive="is-active"><i class="fa fa-calendar"></i> </a>
+
+      </li>
+      <li id="UserName" class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" id="navbarDropdown" routerLinkActive="is-active" role="button"
+          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{userName}}</a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <!-- <a class="dropdown-item" (click)="logoutUser()">Calender</a> -->
+          <a class="dropdown-item" (click)="logoutUser()">Logout</a>
+        </div>
+      </li>
+
+    </ul>
+
+  </div>
+</nav>

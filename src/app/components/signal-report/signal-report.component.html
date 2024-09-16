@@ -1,0 +1,118 @@
+<div *ngIf="show">
+  <div class="row SigEvaRowHEad">
+    <div class="groupHead col-sm-3">
+      <div class="grpHeadCellHead">
+        <p>Domain :</p>
+      </div>
+      <div class="grpHeadCellBody">
+        <p>{{domain}}</p>
+      </div>
+    </div>
+    <div class="groupHead col-sm-3">
+      <div class="grpHeadCellHead">
+        <p>Product Name :</p>
+      </div>
+      <div class="grpHeadCellBody">
+        <p>{{product}}</p>
+      </div>
+    </div>
+    <div class="groupHead col-sm-3">
+      <div class="grpHeadCellHead">
+        <p>Signal Name :</p>
+      </div>
+      <!-- <span style="text-align: center;">:</span> -->
+      <div class="grpHeadCellBody">
+        <p>{{pt}}</p>
+      </div>
+    </div>
+    <div class="groupHead col-sm-3">
+      <div class="grpHeadCellHead">
+        <p>Signal Code :</p>
+      </div>
+      <div class="grpHeadCellBody">
+        <p>{{signalCode}}</p>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex">
+    <table class="table table-bordered">
+      <thead>
+        <tr class="SigEvalTableTr">
+          <th width="15%">Section Heading</th>
+          <th width="70%">Section Body</th>
+          <th width="15%">Comments Section</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of signalData">
+          <td>{{ item.id=='0'?item.title: item.id+'. '+ item.title}}</td>
+          <td>
+            <ckeditor [editor]="Editor" [disabled]="isDisabled" data={{item.data}} [(ngModel)]="item.data"></ckeditor>
+          </td>
+
+          <td>
+            <div class="textarea-container">
+              <textarea class="text_{{item.id}}" #titleInput name="foo" placeholder="Add New Comments"></textarea>
+              <button (click)="addCommentClick(item.id,titleInput.value)">Add Comment</button>
+            </div>
+            <label>Last Comment:-</label>
+            <span id="comment_{{item.id}}">{{ getlatestcommentbysection(item.id) }}</span><br />
+            <button (click)="Getallcomments(item.id)">Get Previous Comment</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="row">
+    <button class="btn btn-primary col-2 mt-3 ml-2" (click)="submitReport()">Save & Exit</button>
+    <button class="btn btn-primary col-2 mt-3 ml-2" (click)="CompleteReport()">Complete Report</button>
+    <button class="btn btn-primary col-2 mt-3 ml-2" (click)="downloadDoc()">Download Report</button>
+  </div>
+</div>
+<p-dialog [(visible)]="displayEvents" [modal]="true" [style]="{width: '50vw'}" [baseZIndex]="100" [draggable]="false"
+  [resizable]="false" height="400">
+  <p-header>
+    <b>All Comments</b>
+  </p-header>
+  <p-table #dt1 [value]="allcomments" [responsive]="true" [scrollable]="true" scrollHeight="300px">
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th pSortableColumn="user">Comment By<p-sortIcon field="user"></p-sortIcon>
+        </th>
+        <th pSortableColumn="comment">Comment<p-sortIcon field="comment"></p-sortIcon>
+        </th>
+        <th pSortableColumn="created">Date and Time<p-sortIcon field="created"></p-sortIcon>
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+      <tr>
+        <td>
+          {{rowData.user}}
+        </td>
+        <td>
+          {{rowData.comment}}
+        </td>
+        <td>
+          {{rowData.created}}
+        </td>
+      </tr>
+    </ng-template>
+    <!-- <ng-template pTemplate="summary">
+
+      </ng-template> -->
+    <!-- <ng-template pTemplate="summary">
+      There are {{eventnameshow?.length}} Events
+      <div class="ui-helper-clearfix" style="text-align: left">
+        <button type="button" pButton icon="pi pi-file-o" iconPos="left" label=" CSV"
+          (click)="dt1.exportCSV()" style="margin-right: 0.5em;"></button>
+          <button type="button" pButton icon="pi pi-file-excel" iconPos="left" label=" EXCEL" (click)="exportExcelevent()" style="margin-right: 0.5em;" class="ui-button-success"></button>
+
+      </div>
+    </ng-template> -->
+  </p-table>
+  <p-footer>
+    <button type="button" pButton icon="pi pi-times" (click)="displayEvents=false" label="Close"></button>
+    <!-- <button type="button" pButton icon="pi pi-times" (click)="displayModal=false" label="No" class="ui-button-secondary"></button> -->
+  </p-footer>
+</p-dialog>

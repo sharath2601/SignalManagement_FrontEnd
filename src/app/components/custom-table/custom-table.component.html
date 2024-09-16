@@ -1,0 +1,387 @@
+<!--Common tables for whole application,
+table data changes as per page selected -->
+
+<!--table for administrator page-->
+<table class="admin-user-table table table-bordered table-responsvie" *ngIf="receivedMsg === 'adminDashboard'">
+    <thead>
+        <tr>
+            <!-- <th style="display: none;">ID</th> -->
+            <th width="11%">User Name</th>
+            <th width="20%">Email ID</th>
+            <th width="20%">Name</th>
+            <th width="13%">Is Admin?</th>
+            <th width="13%">Is User?</th>
+            <th width="13%">Is Active?</th>
+            <th width="10%" class="adminpencil" *ngIf="isNeeded">Edit</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of tableData; let i = index">
+            <!-- <td style="display: none;">{{ item.id }}</td> -->
+            <td>{{ item.username }}</td>
+            <td>{{ item.email }}</td>
+            <td>{{ item.name }}</td>
+            <td *ngIf="!item.isClicked">{{ item.is_admin }}</td>
+            <td *ngIf="item.isClicked">
+                <!-- <input type='text' class="form-control" [(ngModel)]="item.is_admin" /> -->
+                <ng-select [items]="options" (change)="checkPrivileges(item, 'admin', $event)" bindValue="value" bindLabel="value" [(ngModel)]="item.is_admin" [clearable]=false>
+
+                </ng-select>
+            </td>
+            <td *ngIf="!item.isClicked">{{ item.is_manager }}</td>
+            <td *ngIf="item.isClicked">
+                <ng-select [items]="options" (change)="checkPrivileges(item, 'manager', $event)" bindValue="value" bindLabel="value" [(ngModel)]="item.is_manager" [clearable]=false>
+                </ng-select>
+            </td>
+            <td *ngIf="!item.isClicked">{{ item.is_active }}</td>
+            <td *ngIf="item.isClicked">
+                <ng-select [items]="options" bindValue="value" bindLabel="value" [(ngModel)]="item.is_active" [clearable]=false>
+
+                </ng-select>
+            </td>
+            <td class="adminpencil" *ngIf="isNeeded">
+                <fa-icon title="Edit" *ngIf="!item.isClicked" [icon]="faPencilAlt" class="fa-icons" (click)="enableEditing(item, i)">
+                </fa-icon>
+                <fa-icon title="Save" *ngIf="item.isClicked" [icon]="faSave" class="fa-icons" size='lg' (click)="saveChanges(item)">
+                </fa-icon>
+                <fa-icon title="Cancel" *ngIf="item.isClicked" [icon]="faTimes" rotate="90" class="fa-icons ml-3" size='lg' (click)="cancelEditing(item, i)">
+                </fa-icon>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<!--table for admin user management ends-->
+
+<!--table for signal tracking page-->
+<!-- dttrackdashbaord -->
+
+<p-table id="SigTrackPTable" #dttrackdashbaord [value]="tableData" [columns]="trackingcols" [(selection)]="tableData" dataKey="id" styleClass="ui-table-customers" [rowHover]="true" [rows]="50" [showCurrentPageReport]="true" [rowsPerPageOptions]="[50,100,200]"
+    [loading]="loading" [paginator]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} records" [filterDelay]="0" *ngIf="receivedMsg === 'signalTracking' && isdashbaordclick === true" selectionMode="multiple">
+    <ng-template pTemplate="header">
+
+        <tr>
+            <th width="10%">Domain</th>
+            <th width="11%">Product Name</th>
+            <th width="11%">Signal Name</th>
+            <th width="9%">Signal Code</th>
+            <th width="7%">Manual?</th>
+            <th width="11%">Signal Status</th>
+            <th width="10%">Assigned To</th>
+            <th width="9%">Priority</th>
+            <th width="7%" rowspan="2">Reported Date</th>
+            <th width="8%" rowspan="2">Validation Date</th>
+            <th width="7%" rowspan="2">Target Date</th>
+        </tr>
+        <tr>
+            <th>
+                <p-dropdown class="SigTrackThDrop" placeholder="All" appendTo="body" [options]="domainwithall" (onChange)="dttrackdashbaord.filter($event.value, 'domain', 'equals')" styleClass="ui-column-filter" [showClear]="true">
+                    <ng-template let-option pTemplate="item">
+                        <span [class]="'customer-badge status-' + option.value">{{option.label}}</span>
+                    </ng-template>
+                </p-dropdown>
+            </th>
+            <th>
+                <input style="padding: 0px;width: 100%;font-size: 0.75rem; border-radius: 5px; height: 2rem;" pInputText type="text" (input)="dttrackdashbaord.filter($event.target.value, 'product', 'contains')" placeholder="Search by Product" class="ui-column-filter">
+            </th>
+            <th>
+                <input style="padding: 0px;width: 100%;font-size: 0.75rem; border-radius: 5px; height: 2rem;" pInputText type="text" (input)="dttrackdashbaord.filter($event.target.value, 'AE', 'contains')" placeholder="Search by Event" class="ui-column-filter">
+
+                <!-- <p-dropdown appendTo="body" optionLabel="name" [options]="allevents" filter="true"
+              (onChange)="dttrackdashbaord.filter($event.value, 'events', 'equals')" placeholder="Select Event" [showClear]="true">
+            </p-dropdown> -->
+            </th>
+            <th>
+                <input style="padding: 0px;width: 100%;font-size: 0.75rem; border-radius: 5px; height: 2rem;" pInputText type="text" (input)="dttrackdashbaord.filter($event.target.value, 'code', 'contains')" placeholder="Search by Signal Code" class="ui-column-filter">
+            </th>
+            <th>
+                <input style="padding: 0px;width: 100%;font-size: 0.75rem; border-radius: 5px; height: 2rem;" pInputText type="text" (input)="dttrackdashbaord.filter($event.target.value, 'manual', 'contains')" placeholder="Yes" class="ui-column-filter">
+            </th>
+            <th>
+                <p-dropdown class="SigTrackThDrop" placeholder="All" appendTo="body" [options]="statuswithall" (onChange)="dttrackdashbaord.filter($event.value, 'status', 'equals')" styleClass="ui-column-filter" [showClear]="true">
+                    <ng-template let-option pTemplate="item">
+                        <span [class]="'customer-badge status-' + option.value">{{option.label}}</span>
+                    </ng-template>
+                </p-dropdown>
+
+            </th>
+            <th>
+                <input style="padding: 0px;width: 100%;font-size: 0.75rem; border-radius: 5px; height: 2rem;" pInputText type="text" (input)="dttrackdashbaord.filter($event.target.value, 'assigned', 'contains')" placeholder="Search by User" class="ui-column-filter">
+            </th>
+            <th>
+                <p-dropdown class="SigTrackThDrop" appendTo="body" placeholder="All" [options]="Prioritywithall" (onChange)="dttrackdashbaord.filter($event.value, 'priority', 'equals')" styleClass="ui-column-filter" [showClear]="true">
+                    <ng-template let-option pTemplate="item">
+                        <span [class]="'customer-badge status-' + option.value">{{option.label}}</span>
+                    </ng-template>
+                </p-dropdown>
+
+            </th>
+
+
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-customer>
+        <!-- <tr class="ui-selectable-row" ng-class="{'bg-orange': moment().diff(customer.targetDate, getDate()) <= 7; 'bg-red': moment.diff(customer.targetDate, getDate()) <=0}"> -->
+        <tr class="ui-selectable-row" [ngClass]=" checkdate(customer.targetDate)  ? 'date-red':  getsevendays(customer.targetDate)? 'bg-orange':null">
+
+            <td>
+                {{customer.domain}}
+            </td>
+            <td>
+                {{customer.product}}
+            </td>
+            <td *ngIf="customer.status.length == 6">
+                <span>{{customer.AE}}</span>
+            </td>
+            <td *ngIf="customer.status.length != 6" style="cursor: pointer;" (click)="openRelatedSignalData(customer)">
+                <span style="vertical-align: middle;text-decoration: underline;">{{customer.AE}}</span>
+            </td>
+            <td>
+                <span style="vertical-align: middle; ">{{customer.code}}</span>
+            </td>
+            <td>
+                <span style="vertical-align: middle; ">{{customer.manual}}</span>
+            </td>
+            <td>
+                {{customer.status}}
+            </td>
+            <td>
+                <span title="{{customer.assigned}}"></span>({{customer.assigned}}.lenght > 15 ? {{customer.assigned}}.substring(0,14) : {{customer.assigned}})</td>
+            <!-- <td *ngIf="customer.assigned_to.length>0">
+            <span *ngFor="let i of customer.assigned_to ; let j = index"
+              [class]="'customer-badge status-' + customer.caseCount">
+              {{i.itemName }}{{j==customer.assigned_to.length-1 ? ' ' : ', '}}</span>
+          </td>
+          <td *ngIf="!customer.assigned_to?.length">
+            <span [class]="'customer-badge status-' + customer.caseCount">UnAssigned</span>
+          </td> -->
+            <td>
+                <span style="vertical-align: middle; ">{{customer.priority}}</span>
+            </td>
+            <td>
+                <span style="vertical-align: middle;">{{customer.reported_date}}</span>
+            </td>
+            <td>
+                {{customer.validation_date}}
+            </td>
+            <td>
+                <span [class]="'customer-badge status-' + customer.targetDate">{{customer.targetDate }}</span>
+            </td>
+
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+        <tr>
+            <td colspan="11" style="text-align:left">No Record found.</td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+        <div class="ui-helper-clearfix" style="text-align: left">
+            <button type="button" pButton icon="pi pi-file-o" iconPos="left" label="Download Report in CSV" (click)="exportCSV(dttrackdashbaord)" style="margin-right: 0.5em;"></button>
+            <button type="button" pButton icon="pi pi-file-excel" iconPos="left" label="Download Report in EXCEL" (click)="exportExcel()" style="margin-right: 0.5em;" class="ui-button-success"></button>
+
+        </div>
+    </ng-template>
+    <ng-template pTemplate="caption" let-rowData>
+        <div style="text-align:left">
+            <button type="button" pButton icon="pi pi-plus" (click)="showDialogToAdd()" label="Add New Signal"></button>
+        </div>
+    </ng-template>
+</p-table>
+<p-table id="SigTrackPTable" #dttrack [value]="tableData" [columns]="trackingcols" [(selection)]="tableData" dataKey="id" styleClass="ui-table-customers" [rowHover]="true" [rows]="50" [showCurrentPageReport]="true" [rowsPerPageOptions]="[50,100,200]"
+    [loading]="loading" [paginator]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} records" [filterDelay]="0" *ngIf="receivedMsg === 'signalTracking' && isdashbaordclick === false" selectionMode="multiple">
+    <ng-template pTemplate="header">
+        <tr>
+            <th width="10%">Domain</th>
+            <th width="11%">Product Name</th>
+            <th width="11%">Signal Name</th>
+            <th width="9%">Signal Code</th>
+            <th width="7%">Manual?</th>
+            <th width="11%">Signal Status</th>
+            <th width="10%" class="Detec_Validate_Center">Assigned To</th>
+            <th width="9%">Priority</th>
+            <th width="7%" rowspan="2">Reported Date</th>
+            <th width="8%" rowspan="2">Validation Date</th>
+            <th width="7%" rowspan="2">Target Date</th>
+        </tr>
+        <tr>
+            <th>
+                <p-dropdown class="SigTrackThDrop" placeholder="All" appendTo="body" [options]="domainwithall" (onChange)="dttrack.filter($event.value, 'domain', 'equals')" styleClass="ui-column-filter" [showClear]="true">
+                    <ng-template let-option pTemplate="item">
+                        <span [class]="'customer-badge status-' + option.value">{{option.label}}</span>
+                    </ng-template>
+                </p-dropdown>
+            </th>
+            <th>
+                <input style="padding: 0px;width: 100%;font-size: 0.75rem; border-radius: 5px; height: 2rem;" pInputText type="text" (input)="dttrack.filter($event.target.value, 'product', 'contains')" placeholder="Search by Product" class="ui-column-filter">
+            </th>
+            <th>
+                <input style="padding: 0px;width: 100%;font-size: 0.75rem; border-radius: 5px; height: 2rem;" pInputText type="text" (input)="dttrack.filter($event.target.value, 'AE', 'contains')" placeholder="Search by Event" class="ui-column-filter">
+
+                <!-- <p-dropdown appendTo="body" optionLabel="name" [options]="allevents" filter="true"
+                  (onChange)="dttrack.filter($event.value, 'events', 'equals')" placeholder="Select Event" [showClear]="true">
+                </p-dropdown> -->
+            </th>
+            <th>
+                <input style="padding: 0px;width: 100%;font-size: 0.75rem; border-radius: 5px; height: 2rem;" pInputText type="text" (input)="dttrack.filter($event.target.value, 'code', 'contains')" placeholder="Search by Signal Code" class="ui-column-filter">
+            </th>
+            <th>
+                <input style="padding: 0px;width: 100%;font-size: 0.75rem; border-radius: 5px; height: 2rem;" pInputText type="text" (input)="dttrack.filter($event.target.value, 'manual', 'contains')" placeholder="Yes" class="ui-column-filter">
+            </th>
+            <th>
+                <p-dropdown class="SigTrackThDrop" placeholder="All" appendTo="body" [options]="statuswithall" (onChange)="dttrack.filter($event.value, 'status', 'equals')" styleClass="ui-column-filter" [showClear]="true">
+                    <ng-template let-option pTemplate="item">
+                        <span [class]="'customer-badge status-' + option.value">{{option.label}}</span>
+                    </ng-template>
+                </p-dropdown>
+
+            </th>
+            <th>
+                <input style="padding: 0px;width: 100%;font-size: 0.75rem; border-radius: 5px; height: 2rem;" pInputText type="text" (input)="dttrack.filter($event.target.value, 'assigned', 'contains')" placeholder="Search by User" class="ui-column-filter">
+            </th>
+            <th>
+                <p-dropdown class="SigTrackThDrop" appendTo="body" placeholder="All" [options]="Prioritywithall" (onChange)="dttrack.filter($event.value, 'priority', 'equals')" styleClass="ui-column-filter" [showClear]="true">
+                    <ng-template let-option pTemplate="item">
+                        <span [class]="'customer-badge status-' + option.value">{{option.label}}</span>
+                    </ng-template>
+                </p-dropdown>
+
+            </th>
+
+
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-customer>
+        <!-- <tr class="ui-selectable-row" ng-class="{'bg-orange': moment().diff(customer.targetDate, getDate()) <= 7; 'bg-red': moment.diff(customer.targetDate, getDate()) <=0}"> -->
+        <tr class="ui-selectable-row" [ngClass]=" checkdate(customer.targetDate)  ? 'date-red':  getsevendays(customer.targetDate)? 'bg-orange':null">
+
+            <td>
+                {{customer.domain}}
+            </td>
+            <td>
+                {{customer.product}}
+            </td>
+            <td *ngIf="customer.status.length == 6">
+                <span>{{customer.AE}}</span>
+            </td>
+            <td *ngIf="customer.status.length != 6" style="cursor: pointer;" (click)="openRelatedSignalData(customer)">
+                <span style="vertical-align: middle;text-decoration: underline;">{{customer.AE}}</span>
+            </td>
+            <td>
+                <span style="vertical-align: middle; ">{{customer.code}}</span>
+            </td>
+            <td>
+                <span style="vertical-align: middle; ">{{customer.manual}}</span>
+            </td>
+            <td>
+                {{customer.status}}
+            </td>
+            <td>{{customer.assigned}}</td>
+            <!-- <td [innerHtml]="checklenght(customer.assigned)" title="{{customer.assigned}}"><span></span></td> -->
+            <!-- <td *ngIf="customer.assigned_to.length>0">
+                <span *ngFor="let i of customer.assigned_to ; let j = index"
+                  [class]="'customer-badge status-' + customer.caseCount">
+                  {{i.itemName }}{{j==customer.assigned_to.length-1 ? ' ' : ', '}}</span>
+              </td>
+              <td *ngIf="!customer.assigned_to?.length">
+                <span [class]="'customer-badge status-' + customer.caseCount">UnAssigned</span>
+              </td> -->
+            <td>
+                <span style="vertical-align: middle; ">{{customer.priority}}</span>
+            </td>
+            <td>
+                <span style="vertical-align: middle;">{{customer.reported_date}}</span>
+            </td>
+            <td>
+                {{customer.validation_date}}
+            </td>
+            <td>
+                <span [class]="'customer-badge status-' + customer.targetDate">{{customer.targetDate }}</span>
+            </td>
+
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+        <tr>
+            <td colspan="11" style="text-align:left">No Record found.</td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+        <div class="ui-helper-clearfix" style="text-align: left">
+            <button type="button" pButton icon="pi pi-file-o" iconPos="left" label="Download Report in CSV" (click)="exportCSV(dttrack)" style="margin-right: 0.5em;"></button>
+            <button type="button" pButton icon="pi pi-file-excel" iconPos="left" label="Download Report in EXCEL" (click)="exportExcel()" style="margin-right: 0.5em;" class="ui-button-success"></button>
+
+        </div>
+    </ng-template>
+    <ng-template pTemplate="caption" let-rowData>
+        <div style="text-align:left">
+            <button type="button" pButton icon="pi pi-plus" (click)="showDialogToAdd()" label="Add New Signal"></button>
+
+        </div>
+    </ng-template>
+</p-table>
+
+<!--table for custom signal creation in tracking page-->
+<p-dialog header="Add New Signal" [(visible)]="displayDialog" [focusOnShow]="false" [responsive]="true" showEffect="fade" [modal]="true" [style]="{width: '30vw'}" height="100">
+    <div class="container-fluid">
+        <div class="row mt-2">
+            <div class="col-sm-4">
+                <label>Product Type</label>
+            </div>
+            <div class="col-sm-8">
+                <ng-select [items]="pngOptions" [clearable]="false" bindLabel="name" bindValue="name" [(ngModel)]="selectedPng" (change)="getProducts()">
+
+                </ng-select>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-sm-4">
+                <label>Select Type </label>
+            </div>
+            <div class="col-sm-8">
+                <!-- <ng-select [items]="productFamily" [clearable]="false" bindLabel="name" bindValue="name" [(ngModel)]="selectProductFamily"
+          (change)="getProducts(selectedPng)">
+
+        </ng-select> -->
+                <ng-select [items]="productFamily" [clearable]="false" bindLabel="name" bindValue="name" [(ngModel)]="selectProductFamily" (change)="getProducts()">
+
+                </ng-select>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-sm-4">
+                <label>Product Name</label>
+            </div>
+            <div class="col-sm-8">
+                <ng-select [items]="productList" bindLabel="name" bindValue="name" [addTag]="addCustomUser" [(ngModel)]="pngProdName" placeholder="Select Product">
+
+                </ng-select>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-sm-4">
+                <label>Event name</label>
+            </div>
+            <div class="col-sm-8">
+                <input pInputText autofocus [(ngModel)]="customEvent" />
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-sm-4">
+                <label>Note</label>
+            </div>
+            <div class="col-sm-8">
+                <textarea style="border-radius: 0px !important;height: 200px; width: 100%;" pInputText autofocus [(ngModel)]="customComment"></textarea>
+            </div>
+        </div>
+
+    </div>
+    <p-footer>
+        <div class="ui-dialog-buttonpane ui-helper-clearfix">
+            <button type="button" pButton icon="pi pi-check" label="Save" (click)="createCustomSignal(selectedPng, pngProdName, customEvent, customComment)"></button>
+
+        </div>
+    </p-footer>
+</p-dialog>
+
+
+<!--table for signal tracking page ends-->

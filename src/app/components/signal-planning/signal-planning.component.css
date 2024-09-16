@@ -1,0 +1,24 @@
+#SignalTrackingInput_1,#SignalTrackingInput_2,#SignalTrackingInput_3,#SignalTrackingInput_4{
+    padding: 0px;
+    width: 100%;
+    font-size: 0.75rem;
+    border-radius: 5px;
+    height: 2rem;
+
+}
+
+.SigPlanPencil{
+    text-align: center;
+}
+.SelectProducts{
+    margin-bottom: 1%;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+.LabelSigPlaning {
+    font-size: 1rem;
+    font-weight: 600;
+}

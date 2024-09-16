@@ -1,0 +1,47 @@
+
+
+  <!-- <div class="row">
+    <div class="col-sm-2">
+      <label>Domain</label>
+      <ng-select id="available-domains" [items]="typeList" bindLabel="name" bindValue="name" placeholder="Select"
+        [(ngModel)]="type" [clearable]='false' (change)="onDomainChange(type)"></ng-select>
+    </div>
+
+    <div class="col-sm-4">
+      <label>Product(s)</label>
+      <ng-select id="available-products" [items]="productList" [multiple]="true" [maxSelectedItems]="5" bindLabel="name"
+        bindValue="name" placeholder="Select" [(ngModel)]="product" (change)="onProductChange(product)"></ng-select>
+    </div>
+
+    <div class="col-sm-4">
+      <label>Quarter(s)</label>
+      <ng-select id="available-quarters" [items]="quarterList" bindLabel="name" bindValue="name" [multiple]="true"
+        [maxSelectedItems]="5" placeholder="Select" [(ngModel)]="quarter"></ng-select>
+    </div>
+
+    <div class="col-sm-4">
+      <label>Event(s)</label>
+      <ng-select id="available-events" [items]="eventList" bindLabel="name" bindValue="name" placeholder="Select"
+        [(ngModel)]="event" (change)="onEventChange(event)">
+      </ng-select>
+    </div>
+
+    <div class="col-sm-3">
+      <label>Status</label>
+      <ng-select id="available-status" [items]="statusList" bindLabel="name" bindValue="name" placeholder="Select"
+        [(ngModel)]="status" [clearable]="false"></ng-select>
+    </div>
+
+    <div class="col-sm-3">
+      <button class="btn btn-primary" (click)="filterSignals(type, product, quarter, event, status)">Filter</button>
+    </div>
+
+  </div> -->
+
+
+    <!--Table for valid signal listings-->
+    <div id="pdf-content">
+      <app-custom-table [tableData]='rows' [actionsNeeded]="false" [receivedMsg]="'signalTracking'" [isdashbaordclick]="isdashboardclick">
+      </app-custom-table>
+    </div>
+

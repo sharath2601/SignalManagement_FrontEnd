@@ -1,0 +1,378 @@
+<div class="detection-container">
+    <button *ngIf="getUnhandledSignals" (click)="checkUnhandledSignals(false, false, false)" class="btn btn-primary col-sm-2 mb-3 navBttns">
+    Signals to be Validated &nbsp;<i class="fas fa-arrow-alt-circle-right"></i>
+  </button>
+
+    <!--unhandled signals page parameters-->
+    <div class="mb-2" *ngIf="!getUnhandledSignals">
+        <button *ngIf="!getUnhandledSignals" (click)="showQueryDetails()" class="btn btn-primary col-sm-2 mb-3 navBttns">
+      <i class="fas fa-arrow-alt-circle-left"></i> &nbsp;Go To Query Page
+    </button>
+
+        <div>{{ retainedQ }}</div>
+        <div class="row">
+            <div class="col-sm-3">
+                <!-- <h4 style="padding-top: 5px;font-size:1vw;">Domain</h4> -->
+                <ng-select [items]="domains" bindLabel="name" bindValue="name" placeholder="Select Domain" [(ngModel)]="sdt" (change)="onChangeDropdown(sdt, 'domain')" [clearable]="false">
+                </ng-select>
+            </div>
+
+            <div class="col-sm-3">
+                <!-- <h4 style="padding-top: 5px;font-size:1vw;">Product Family</h4> -->
+                <ng-select [items]="indiPrFamilyList" bindLabel="name" bindValue="name" placeholder="Select" [(ngModel)]="spf" (change)="onChangeDropdown(spf, 'pFamily')" [clearable]="false">
+                </ng-select>
+            </div>
+
+            <div class="col-sm-6">
+                <!-- <h4 style="padding-top: 5px;font-size:1vw;">Product</h4> -->
+                <ng-select class="custom" [items]="productList" bindLabel="name" [multiple]="true" placeholder="All Product(s)" (change)="onChangeDropdown(sp, 'product')" [(ngModel)]="sp" [maxSelectedItems]="5">
+                    <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                        <input id="item-{{ index }}" type="checkbox" [ngModel]="item$.selected" /> {{ item.name }}
+                    </ng-template>
+                </ng-select>
+                <!-- <ng-select
+          class="custom"
+          [items]="productList"
+          bindLabel="name"
+          bindValue="name"
+          [maxSelectedItems]="5"
+          [multiple]="true"
+          placeholder="All Product(s)"
+          (remove)="onChangeDropdown(sp, 'product')"
+          (clear)="onChangeDropdown(sp, 'product')"
+          (change)="onChangeDropdown(sp, 'product')"
+          [(ngModel)]="sp"
+        >
+        </ng-select> -->
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-sm-5">
+                <!-- <h4 style="padding-top: 5px;font-size:1vw;">Period</h4> -->
+                <ng-select [items]="qList" bindLabel="name" groupBy="Year" [multiple]="true" [compareWith]="compareAccounts" [selectableGroup]="true" placeholder="All Period(s)" [(ngModel)]="spr" [maxSelectedItems]="5" (change)="onChangeDropdown(spr, 'quarter')">
+                    <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                        <input id="item-{{ index }}" type="checkbox" [ngModel]="item$.selected" /> {{ item.name }}
+                    </ng-template>
+                </ng-select>
+                <!-- <ng-select
+          [items]="qList"
+          bindLabel="name"
+          groupBy="Year"
+          [compareWith]="compareItems"
+          [maxSelectedItems]="5"
+          [multiple]="true"
+          [selectableGroup]="true"
+          placeholder="All Period(s)"
+          [(ngModel)]="spr"
+          (clear)="onChangeDropdown(spr, 'quarter')"
+          (remove)="onChangeDropdown(spr, 'quarter')"
+          (change)="onChangeDropdown(spr, 'quarter')"
+        >
+          <ng-template ng-optgroup-tmp let-item="item">
+            {{ item.Year || "Unnamed group" }}
+          </ng-template>
+        </ng-select> -->
+            </div>
+
+            <div class="col-sm-2">
+                <!-- <h4 style="padding-top: 5px;font-size:1vw;">Event</h4>-->
+                <ng-select [items]="AEList" bindLabel="name" bindValue="name" [(ngModel)]="ss" [searchable]="true" [searchWhileComposing]="true" placeholder="Select Event" [clearSearchOnAdd]="true" [virtualScroll]="true" (clear)="onChangeDropdown(ss, 'selectedPTdata')"
+                    (change)="onChangeDropdown(ss, 'selectedPTdata')">
+                </ng-select>
+            </div>
+
+            <div class="col-sm-2">
+                <ng-select [items]="methodsList" bindLabel="itemName" bindValue="itemName" placeholder="Methods" [(ngModel)]="sm" (clear)="onChangeDropdown(sm, 'method')" (change)="onChangeDropdown(sm, 'method')">
+                    <ng-template ng-option-tmp let-item="item">
+                        {{ item.itemName | uppercase }} <br />
+                    </ng-template>
+                </ng-select>
+            </div>
+
+            <div class="col-sm-2">
+                <ng-select [items]="valList" bindLabel="itemName" bindValue="id" [(ngModel)]="selectedValItem" placeholder="Select Short Comment" [clearable]="true" (clear)="onChangeDropdown(selectedValItem, 'validation-item')" (change)="onChangeDropdown(selectedValItem, 'validation-item')">
+                </ng-select>
+            </div>
+
+            <div class="col-sm-1">
+                <button class="btn unhabdleButton" (click)="
+            filterUnhandledSignals(
+              sdt,
+              sp,
+              spr,
+              ss,
+              selectedValItem,
+              (startCount = 1),
+              (endCount = 50),
+              false
+            )
+          ">
+          Search
+        </button>
+            </div>
+        </div>
+    </div>
+
+    <!--query page in detection page-->
+    <div *ngIf="getUnhandledSignals">
+        <div class="row sigl-dectn">
+            <div id="type-list" class="col-sm-3">
+                <!-- <label>Domain</label> -->
+                <ng-select class="sd_signalValidate" [items]="qDomains" bindLabel="name" bindValue="name" placeholder="Select Domain" [searchable]="false" (change)="onTypeSelect(selectDomainType, selectProdFamType)" [(ngModel)]="selectDomainType" [clearable]="false">
+                </ng-select>
+            </div>
+
+            <div id="type-list" class="col-sm-3">
+                <!-- <label>Product Family</label> -->
+                <ng-select class="sd_signalValidate" [items]="qIndiPrFamilyList" bindLabel="name" bindValue="name" placeholder="Select" [searchable]="false" (change)="onTypeSelect(selectDomainType, selectProdFamType)" [(ngModel)]="selectProdFamType" [clearable]="false">
+                </ng-select>
+            </div>
+
+            <div id="product-list" class="col-sm-6">
+                <!-- <label>Products</label> -->
+                <ng-select class="sd_signalValidate" [items]="qProductList" bindLabel="name" bindValue="name" placeholder="All Product" [loading]="queryPageProductLoader" (change)="onItemSelect()" [(ngModel)]="selectedProductItem">
+                </ng-select>
+            </div>
+        </div>
+        <div class="row sigl-dectn mt-3">
+            <div id="methods-list" class="col-sm-3">
+                <!-- <label>Detection Methods</label> -->
+                <ng-select class="sd_signalValidate" [items]="qMethodsList" bindLabel="itemName" bindValue="itemName" [loading]="queryPageMethodsLoader" placeholder="Methods" (change)="onMethodChange(selectedMethodItem)" [(ngModel)]="selectedMethodItem" [clearable]="true">
+                    <ng-template ng-option-tmp let-item="item">
+                        {{ item.itemName | uppercase }} <br />
+                    </ng-template>
+                </ng-select>
+            </div>
+
+            <div id="hierarchial-selection" class="col-sm-2">
+                <!-- <label>Hierarchy</label> -->
+                <ng-select class="sd_signalValidate" [items]="qHierachialSelection" bindLabel="itemName" bindValue="itemName" placeholder="Hierarchy" [(ngModel)]="selectedHierarchialItem" (change)="onItemSelect()" [clearable]="true">
+                </ng-select>
+            </div>
+
+            <div id="ae-data-list" class="col-sm-6">
+                <!-- <label>Event</label> -->
+                <ng-select class="sd_signalValidate" [items]="qAEList" bindLabel="itemName" bindValue="itemName" placeholder="Event" [loading]="queryPageEventsLoader" [(ngModel)]="selectedAEItem">
+                </ng-select>
+            </div>
+
+            <div class="col-sm-1">
+                <button class="btn unhabdleButton" (click)="submitReport()">
+          Search
+        </button>
+            </div>
+
+            <div style="margin-bottom: 1%;"></div>
+
+            <div id="query-page-table" class="container-fluid mt-3" *ngIf="rows.length > 0">
+                <p-table #dt [columns]='Querydetectedsingcols' [value]="rows" dataKey="id" [rowHover]="true" [rows]="25" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10, 25, 50]" [paginator]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} records">
+                    <ng-template pTemplate="header" let-columns>
+                        <tr>
+                            <th width="16%">Product Name</th>
+                            <th width="16%">Event Name</th>
+                            <th width="14%">Detection Method</th>
+                            <th width="7%">Level</th>
+                            <th *ngIf="
+                  selectedMethodItem === 'PRR' ||
+                  selectedMethodItem === 'PRR+CHISQUARE'
+                " width="7%">
+                                PRR(-)
+                            </th>
+                            <th *ngIf="
+                  selectedMethodItem === 'PRR' ||
+                  selectedMethodItem === 'PRR+CHISQUARE'
+                " width="7%">
+                                PRR()
+                            </th>
+                            <th *ngIf="
+                  selectedMethodItem === 'PRR' ||
+                  selectedMethodItem === 'PRR+CHISQUARE'
+                " width="7%">
+                                PRR(+)
+                            </th>
+                            <th width="9%" *ngIf="selectedMethodItem === 'PRR+CHISQUARE'">
+                                ChiSquare
+                            </th>
+                            <th width="8%">Case Count</th>
+                            <th width="8%">
+                                RPC Count
+                            </th>
+                            <th width="10%">Short Comment</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-customer let-i="rowIndex">
+                        <tr class="ui-selectable-row">
+                            <td>
+                                {{ customer.product }}
+                            </td>
+                            <td>
+                                <span style="vertical-align: middle;">{{ customer.name }}</span>
+                            </td>
+                            <td>
+                                <span style="vertical-align: middle;">{{
+                  customer.method | uppercase
+                }}</span>
+                            </td>
+                            <td>
+                                {{ customer.level }}
+                            </td>
+                            <td *ngIf="
+                  selectedMethodItem === 'PRR' ||
+                  selectedMethodItem === 'PRR+CHISQUARE'
+                " [ngClass]="customer.signal_id != -1 ? 'bg-orange' : null">
+                                {{ customer.result.PRR_Lower_Bound | number }}
+                            </td>
+                            <td *ngIf="
+                  selectedMethodItem === 'PRR' ||
+                  selectedMethodItem === 'PRR+CHISQUARE'
+                " [ngClass]="customer.signal_id != -1 ? 'bg-orange' : null">
+                                {{ customer.result.PRR | number }}
+                            </td>
+                            <td *ngIf="
+                  selectedMethodItem === 'PRR' ||
+                  selectedMethodItem === 'PRR+CHISQUARE'
+                ">
+                                {{ customer.result.PRR_Upper_Bound | number }}
+                            </td>
+                            <td *ngIf="selectedMethodItem === 'PRR+CHISQUARE'" [ngClass]="customer.signal_id != -1 ? 'bg-red' : null">
+                                {{ customer.result.ChiSquare | number }}
+                            </td>
+                            <td style="cursor: pointer;">
+                                <span style="text-decoration: underline;" [class]="'customer-badge status-' + customer.caseCount" (click)="openRelatedIcsrList(customer, 'No', i, 'QueryPage', '')">{{ customer.caseCount }}</span
+                >
+              </td>
+              <td>
+                <!-- {{ customer.current_review_period }} -->
+                <span *ngFor="let it of customer.current_review_period; let index" >
+                  {{ it.count ? it.count : 0 }}
+                </span>
+                            </td>
+                            <td>
+                                {{ customer.short_comment }}
+                            </td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="emptymessage">
+                        <tr>
+                            <td colspan="5" style="text-align: left;">No Record found.</td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="summary">
+                        <div class="ui-helper-clearfix" style="text-align: left;">
+                            <button type="button" pButton icon="pi pi-file-o" iconPos="left" label="Download in CSV" (click)="exportCSVquery(dt)" style="margin-right: 0.5em;"></button>
+                            <button type="button" pButton icon="pi pi-file-o" iconPos="left" label="Download in Excel" (click)="downloadQueryInExcel()" style="margin-right: 0.5em;"></button>
+                        </div>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+    </div>
+
+    <!--Table for signal detection listings in unhandled signals page-->
+    <div id="SigNalDetectionTable" *ngIf="!getUnhandledSignals">
+        <div class="NavTable align-middle">
+            <div class="d-flex">
+                <div class="ml-auto align-middle" *ngIf="unhandledRows.length > 0">
+                    {{ startCount + " - " + endCount + " of " + totalCount }} &nbsp;
+                    <span class="align-middle">
+            <i
+              (click)="changeSets(50, 50, 'prev')"
+              class="pi pi-chevron-left"
+              [ngClass]="{
+                'enabled-arrows': startCount !== 1,
+                'disabled-arrows': startCount === 1
+              }"
+             title="Previous"></i> </span
+          >&nbsp;
+          <span class="align-middle ripple-effect">
+            <i
+              (click)="changeSets(50, 50, 'next')"
+              class="pi pi-chevron-right"
+              [ngClass]="reachedEnd === true ? 'disabled-arrows' : 'enabled-arrows'"
+              title="Next"></i
+          ></span>
+                </div>
+            </div>
+        </div>
+        <!-- <app-custom-table [tableData]="unhandledRows" [prodFam]="isProdFamSel" [actionsNeeded]="false" [type]="selectDomainType"
+      [receivedMsg]="'signalDetectionUnhandledSignals'">
+    </app-custom-table> -->
+        <div *ngIf="unhandledRows.length >= 1">
+            <p-table #dt1 [columns]="detectedsingcols" [value]="unhandledRows" [rows]="50" [paginator]="false">
+                <ng-template pTemplate="header" let-columns>
+                    <tr class="Sd_Unhandle_th">
+                        <th class="Detec_Validat_PrName" width="18%">Product Name</th>
+                        <th class="Detec_Validat_EventName" width="18%">Event Name</th>
+                        <th class="Detec_Validate_Center" width="8%">Detection Method</th>
+                        <!-- <th class="Detec_Validate_Center" pSortableColumn="level" width="">Level</th> -->
+                        <th class="Detec_Validate_Center" width="8%">Statistical Value</th>
+                        <th class="Detec_Validate_Center" width="8%">Case Count</th>
+                        <th class="Detec_Validate_Center" width="12%" title="Reporting Period Case Count">
+                            RPC Count
+                        </th>
+                        <th class="Detec_Validat" rowspan="2" width="14%">
+                            Short Comment
+                        </th>
+                        <th width="14%">Previous Short Comment</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-customer let-i="rowIndex">
+                    <tr class="ui-selectable-row Sd_Unhandle">
+                        <td class="Detec_Validat_PrName" title="{{ customer.product }}">
+                            {{ customer.product }}
+                        </td>
+                        <td class="Detec_Validat_EventName" title="{{ customer.name }}">
+                            <span>{{ customer.name }}</span>
+                        </td>
+                        <td class="Detec_Validate_Center">
+                            <span>{{ customer.method | uppercase }}</span>
+                        </td>
+                        <td class="Detec_Validate_Center">
+                            <span>{{ customer.result.PRR_Lower_Bound | number }}</span>
+                            <span *ngIf="customer.result.ChiSquare" style="font-size: medium !important;">, {{ customer.result.ChiSquare | number }}</span
+              >
+            </td>
+            <td class="Detec_Validate_Cur">
+              <span
+                [class]="'customer-badge status-' + customer.caseCount"
+                (click)="
+                  openRelatedIcsrList(customer, 'No', i, 'unhandledPage', '')
+                "
+                >{{ customer.caseCount }}</span
+              >
+            </td>
+            <td class="Detec_Validate_Cur">
+              <span
+                class="d-flex"
+                >
+                <span [class]="'customer-badge status-' + customer.caseCount" *ngFor="let it of customer.current_review_period; let in = index" (click)="
+                openRelatedIcsrList(customer, 'Yes', i, 'unhandledPage', it)">
+                  {{ in === customer.current_review_period.length - 1 ? it.count + '' : it.count + ' , ' }}
+                </span>
+                            </span>
+                        </td>
+                        <td class="Detec_Validat" title="{{ customer.short_comment }}">
+                            {{ customer.short_comment }}
+                        </td>
+                        <td>
+                            {{ customer.previous_short_comment ? customer.previous_short_comment : "" }}
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="7" style="text-align: left;">No Record found.</td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="summary">
+                    <div class="ui-helper-clearfix" style="text-align: left;">
+                        <button type="button" pButton icon="pi pi-file-o" iconPos="left" label="Download in CSV" (click)="exportCSV(dt1)" style="margin-right: 0.5em;"></button>
+                        <button type="button" pButton icon="pi pi-file-o" iconPos="left" label="Download in Excel" (click)="downloadUnhandledInExcel()" style="margin-right: 0.5em;"></button>
+                    </div>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
