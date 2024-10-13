@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://192.168.1.7:3400/maisignal/v0/'
+  apiUrl: 'http://173.208.138.125:2024/maisignal/v0/'
 };
 
 /*
